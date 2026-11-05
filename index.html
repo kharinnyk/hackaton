@@ -1,0 +1,1221 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Git Girls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: menu lateral escuro + topo fixo + conteúdo central, igual ao Fox English. Tema noturno com dourado. */
+:root{
+ --bg:#f4ecff;--card:#ffffff;--ink:#2b1458;--mut:#5f4894;--line:#d5c2fb;--bd:#8a72c4;--chip:#f8f1ff;
+ --acc:#6a2bd0;--accd:#4b1aa6;--grad:linear-gradient(90deg,#7a35e6,#c42a86);
+ --ok:#12a150;--ok-t:#0b6b36;--okb:#dcf7e6;--bad:#e5484d;--bad-t:#a8231c;--badb:#fde4e4;--warn-t:#7a4a00;--warnb:#fff1d6;--star:#ffb800;
+ --gld:#f2c98a;--gld2:#f7dcb0;--gld-ink:#7a520b;--gldg:rgba(242,201,138,.3);
+ --night:#110828;--night2:#1d1145;--night3:#241552;--on-night:#f3eaff;--mut-night:#d3c7ee;
+ --k1-bg:#ece2ff;--k1-t:#2b1458;--k1-b:#7a35e6;--k2-bg:#fff0d1;--k2-t:#4a3000;--k2-b:#b8862f;--k3-bg:#ffe1f0;--k3-t:#5c0f35;--k3-b:#c42a86;
+ --avail:rgba(122,53,230,.10);--free:rgba(18,161,80,.18);--hatch:#cdb8f5;
+ color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#160c34;--card:#20124a;--ink:#ece6f8;--mut:#c9bde6;--line:#43307f;--bd:#8f7cc9;--chip:#301c68;--acc:#c3a2ff;--accd:#8a5be0;
+ --ok-t:#7ee2a8;--okb:#12362a;--bad-t:#ff9a9a;--badb:#431c25;--warn-t:#ffd78a;--warnb:#4a3814;--gld-ink:#f2c98a;
+ --k1-bg:#34206e;--k1-t:#f0e8ff;--k1-b:#a97bff;--k2-bg:#4a3814;--k2-t:#ffe9bd;--k2-b:#f2c98a;--k3-bg:#5a1d44;--k3-t:#ffe0f0;--k3-b:#ff7cc0;
+ --avail:rgba(169,123,255,.14);--free:rgba(110,231,160,.18);--hatch:#4a3590;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#160c34;--card:#20124a;--ink:#ece6f8;--mut:#c9bde6;--line:#43307f;--bd:#8f7cc9;--chip:#301c68;--acc:#c3a2ff;--accd:#8a5be0;
+ --ok-t:#7ee2a8;--okb:#12362a;--bad-t:#ff9a9a;--badb:#431c25;--warn-t:#ffd78a;--warnb:#4a3814;--gld-ink:#f2c98a;
+ --k1-bg:#34206e;--k1-t:#f0e8ff;--k1-b:#a97bff;--k2-bg:#4a3814;--k2-t:#ffe9bd;--k2-b:#f2c98a;--k3-bg:#5a1d44;--k3-t:#ffe0f0;--k3-b:#ff7cc0;
+ --avail:rgba(169,123,255,.14);--free:rgba(110,231,160,.18);--hatch:#4a3590;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3,h4{font-family:Nunito,system-ui,sans-serif;font-weight:700;line-height:1.2;margin:0 0 8px;text-wrap:balance}
+h1{font-size:1.9rem}h2{font-size:1.4rem}h3{font-size:1.15rem}
+p{margin:0 0 12px}.mut{color:var(--mut)}.center{text-align:center}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--acc)}
+.skip{position:absolute;left:8px;top:-60px;z-index:50;background:var(--card);color:var(--ink);padding:8px 14px;border-radius:10px;border:2px solid var(--gld)}.skip:focus{top:8px}
+:focus-visible{outline:3px solid var(--gld);outline-offset:2px}
+:root:not([data-theme="dark"]) :focus-visible{outline-color:#7a520b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) :focus-visible{outline-color:var(--gld)}}
+/* céu */
+#sky{display:none;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;background:radial-gradient(ellipse 38% 55% at -4% 22%,rgba(139,92,246,.30),transparent 70%),radial-gradient(ellipse 34% 50% at 104% 14%,rgba(99,102,241,.28),transparent 70%),radial-gradient(ellipse 30% 42% at 98% 88%,rgba(167,139,250,.20),transparent 72%),radial-gradient(ellipse 36% 40% at 8% 100%,rgba(99,102,241,.22),transparent 72%),var(--bg)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #sky{display:block}}
+:root[data-theme="dark"] #sky{display:block}
+#sky i{position:absolute;display:block;width:var(--s);height:var(--s);margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);background:var(--c);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);opacity:.8;animation:tw var(--d) ease-in-out var(--l) infinite}
+@keyframes tw{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:.95;transform:scale(1)}}
+/* casca */
+#shell{display:flex;min-height:100vh;position:relative;z-index:1}
+#main{flex:1;min-width:0}
+#side{width:228px;flex:none;position:sticky;top:0;height:100vh;padding:20px 14px 0 max(14px,env(safe-area-inset-left,0px));background:var(--night);color:var(--on-night);border-right:1px solid var(--gldg);display:flex;flex-direction:column;gap:4px;overflow:auto}
+.logo{display:flex;flex-direction:column;align-items:center;margin-bottom:14px;gap:4px;text-decoration:none}
+.logo b{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;font-weight:700;color:var(--gld);text-align:center;line-height:1}
+.logo small{color:var(--mut-night);font-size:.85rem;text-align:center}
+#side nav{display:flex;flex-direction:column;gap:2px}
+.nv{display:flex;gap:10px;align-items:center;width:100%;font-weight:600;font-size:1rem;color:#e4d9ff;background:transparent;border:0;border-radius:14px;padding:11px 12px;cursor:pointer;text-align:left;min-height:44px}
+.nv:hover{background:rgba(155,77,255,.18)}
+.nv.on{background:rgba(155,77,255,.34);color:#fff;box-shadow:inset 0 0 0 1px rgba(242,201,138,.45)}
+.nv:focus-visible{outline-color:var(--gld)}
+#top{display:flex;gap:10px;align-items:center;padding:14px max(22px,env(safe-area-inset-right,0px)) 14px max(22px,env(safe-area-inset-left,0px));position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg)}
+:root[data-theme="dark"] #top{background:rgba(22,12,52,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #top{background:rgba(22,12,52,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}}
+.srch{position:relative;flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--bd);border-radius:999px;padding:7px 16px;min-width:0}
+.srch input[type=text]{flex:1;width:100%;border:0;background:transparent;outline:none;min-width:0;min-height:0;padding:0;border-radius:0}
+.srch:focus-within{outline:3px solid var(--gld);outline-offset:2px}
+.srch input::placeholder{color:var(--mut);opacity:1}
+#res{display:none;position:absolute;left:0;right:0;top:112%;background:var(--card);border:1.5px solid var(--bd);border-radius:16px;padding:6px;box-shadow:0 12px 30px rgba(40,10,90,.25);z-index:8}
+#res button{display:flex;flex-direction:column;align-items:flex-start;width:100%;background:transparent;border:0;border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left}
+#res button:hover{background:var(--chip)}#res small{color:var(--mut)}#res .none{display:block;padding:8px 10px}
+.ib{font-size:1.1rem;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--bd);background:var(--card);cursor:pointer;flex:none}
+.chp{font-weight:600;background:var(--card);border:1.5px solid var(--bd);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.av{font-size:1.5rem;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:var(--grad);border:0;cursor:pointer;flex:none}
+#app{max-width:680px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 96px max(16px,env(safe-area-inset-left,0px));outline:none}
+#app.wide{max-width:1120px}
+body.onb #side,body.onb .chp,body.onb #av,body.onb #fab,body.onb .srch{display:none}
+body.onb #top{justify-content:flex-end}
+/* botões */
+.btn{display:inline-block;font-weight:800;font-size:1.05rem;color:#fff;background:var(--grad);border:0;border-bottom:5px solid var(--accd);border-radius:16px;padding:12px 20px;margin-top:10px;cursor:pointer;text-align:center;min-height:48px;text-decoration:none}
+.btn.block{display:block;width:100%}
+.btn:active{transform:translateY(3px);border-bottom-width:2px}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.55;cursor:not-allowed}
+.btn.sm{font-size:.95rem;padding:8px 14px;min-height:40px;border-bottom-width:4px;margin-top:6px}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--bd);border-bottom-width:4px}
+.btn.gold{background:var(--gld);color:#2a1450;border:0;border-radius:12px;padding:12px 26px;font-weight:700}
+.btn.gold:hover{background:#f7d7a2}
+.btn.outline-gold{background:transparent;color:var(--gld);border:1.5px solid rgba(242,201,138,.75);border-radius:999px;padding:10px 24px;font-weight:700}
+.btn.outline-gold:hover{background:rgba(242,201,138,.14)}
+.btn.danger{background:transparent;color:var(--bad-t);border:2px solid var(--bad-t);border-bottom-width:4px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.row>.btn{margin-top:0}
+.sp{flex:1}
+/* cards */
+.sec{font-size:1.5rem;font-weight:700;margin:30px 0 14px;display:flex;align-items:center;gap:14px}
+.sec::after{content:'';flex:1;height:1px;background:rgba(242,201,138,.35)}
+.c{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 6px 0 rgba(95,31,192,.08)}
+.c h2,.c h3{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.95rem;font-weight:600;padding:3px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--chip);color:var(--ink)}
+.chip.ok{border-color:var(--ok-t);background:var(--okb);color:var(--ok-t)}
+.chip.gold{border-color:var(--gld);background:var(--gld);color:#2a1450}
+.chip.warn{border-color:var(--warn-t);background:var(--warnb);color:var(--warn-t)}
+.chip.bad{border-color:var(--bad-t);background:var(--badb);color:var(--bad-t)}
+.ainote{font-size:.95rem;color:var(--mut);border-top:1px dashed var(--bd);padding-top:12px;margin-top:24px}
+.hero{position:relative;overflow:hidden;border-radius:22px;border:1.5px solid rgba(242,201,138,.4);padding:36px 32px;padding-right:220px;min-height:240px;color:#f6ecff;margin-bottom:14px;background:var(--night3)}
+.hero h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.7rem;line-height:1.05;margin:0 0 16px;color:var(--gld2)}
+.hero h1 em{font-style:normal;color:#d2b6ff}
+.hero p{max-width:420px;font-size:1.0625rem;margin-bottom:24px;color:#ece3fb}
+.hero .bk{position:absolute;right:36px;top:50%;transform:translateY(-50%);width:132px;height:132px;display:grid;place-items:center;border-radius:50%;background:rgba(242,201,138,.1);font-size:72px}
+.next{border:1px solid rgba(242,201,138,.45);background:var(--card);border-radius:20px;padding:24px;margin-bottom:14px}
+.next .nl{margin:0 0 8px;font-size:.875rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gld-ink)}
+.next h3{font-size:1.5rem;margin:0 0 8px}.next .ns{margin:0 0 20px;color:var(--mut)}
+.uni{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.uc{display:flex;flex-direction:column;align-items:flex-start;min-height:180px;padding:22px;border-radius:18px;border:1.5px solid var(--gldg);background:var(--night2);color:var(--on-night);cursor:pointer;text-align:left;text-decoration:none}
+.uc:hover,.uc:focus-visible{border-color:var(--gld)}
+.uc .im{display:flex;gap:6px;height:48px;margin:0 0 12px;font-size:36px;line-height:1;align-items:center}
+.uc h3{font-size:1.2rem;color:#f7e3bd;margin:0 0 6px}.uc p{color:#e6dcf7;margin:0 0 16px}.uc .go{margin-top:auto;font-weight:700;color:var(--gld2)}
+.realm{display:flex;gap:14px;align-items:center;border-radius:20px;border:1.5px solid rgba(242,201,138,.5);padding:16px;margin:0 0 12px;color:var(--on-night);background:var(--night2)}
+.realm .em{font-size:44px;line-height:1}.realm h3{font-size:1.3rem;color:var(--gld2);margin:0}.realm p{margin:4px 0 0;color:#e6dcf7}
+.pil{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.pil .c{margin:0}.pil .lb{font-size:.875rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gld-ink);margin:0 0 6px}
+/* formulários */
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}.fld>label,.lbl{font-weight:700}
+input[type=text],input[type=number],input[type=date],input[type=time],select,.ta{background:var(--card);color:var(--ink);border:1.5px solid var(--bd);border-radius:12px;padding:10px 12px;min-height:44px;width:100%}
+.ta{resize:vertical;min-height:90px}.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+input:focus-visible,select:focus-visible,.ta:focus-visible{outline:3px solid var(--gld);outline-offset:1px}
+input[type=range]{width:100%;accent-color:#7a35e6}
+.hint{font-size:.95rem;color:var(--mut)}
+.err{color:var(--bad-t);font-weight:600;margin:6px 0}
+.okm{color:var(--ok-t);font-weight:600}
+.warnbox{background:var(--warnb);color:var(--warn-t);border:1.5px solid var(--warn-t);border-radius:14px;padding:10px 14px;margin:10px 0}
+.infobox{background:var(--chip);border:1.5px solid var(--bd);border-radius:14px;padding:10px 14px;margin:10px 0}
+.tg{background:var(--card);color:var(--ink);border:2px solid var(--bd);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer;font-weight:600}
+.tg[aria-pressed=true]{background:var(--gld);border-color:var(--gld);color:#2a1450}
+.tg:hover{border-color:var(--acc)}
+.seg{display:inline-flex;border:2px solid var(--bd);border-radius:999px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:8px 16px;min-height:44px;cursor:pointer;font-weight:700}
+.seg button[aria-pressed=true]{background:var(--gld);color:#2a1450}
+details.d{border:1.5px solid var(--line);border-radius:14px;padding:8px 14px;margin:8px 0;background:var(--card)}
+details.d summary{cursor:pointer;font-weight:700;min-height:32px;display:flex;align-items:center}
+.gl{font:inherit;background:none;border:0;border-bottom:2px dotted var(--acc);color:inherit;padding:0;cursor:help}
+#gpop{position:absolute;z-index:80;background:var(--night2);color:var(--on-night);border:1.5px solid var(--gld);border-radius:12px;padding:10px 12px;box-shadow:0 10px 26px rgba(0,0,0,.35);font-size:.95rem}
+.rate{display:inline-flex;gap:4px}.rb{background:var(--card);border:1.5px solid var(--bd);border-radius:10px;min-width:44px;min-height:44px;cursor:pointer}.rb[aria-pressed=true]{background:var(--gld);border-color:var(--gld)}
+/* onboarding */
+.wel{text-align:center;padding-top:12px}
+.wel .hero{padding:34px 26px;text-align:left}
+.stp .top2{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bar{flex:1;height:14px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#c42a86,#f2c98a);border-radius:9px;transition:width .3s}
+.q{font-size:1.5rem;font-weight:700;margin:0 0 6px}
+.opts{display:grid;gap:10px;margin:12px 0}
+.opt{font-weight:700;font-size:1.05rem;text-align:left;color:var(--ink);background:var(--card);border:2px solid var(--bd);border-bottom-width:5px;border-radius:14px;padding:12px 14px;cursor:pointer;min-height:48px}
+.opt:hover{border-color:var(--acc)}.opt[aria-pressed=true],.opt[aria-checked=true]{background:var(--gld);border-color:var(--gld);color:#2a1450}
+.opt small{display:block;font-weight:400}
+.opt.good{background:var(--okb);border-color:var(--ok-t);color:var(--ink)}.opt.bad{background:var(--badb);border-color:var(--bad-t);color:var(--ink)}
+.nav2{display:flex;gap:10px;margin-top:14px}.nav2 .btn{margin-top:0}.nav2 .btn:last-child{flex:1}
+.skg{display:grid;gap:10px}.skr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,190px);gap:8px;align-items:center}
+@media (max-width:480px){.skr{grid-template-columns:1fr}}
+.avd{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;background:var(--card)}
+.avd.off{opacity:.8;background:var(--chip)}
+.avd h4{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 6px}
+.rg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.rg input[type=time]{width:auto;min-width:118px}
+.sumg{display:grid;gap:8px}.sumr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border-bottom:1px dashed var(--line);padding:6px 0}
+.sumr b{display:block}.sumr .btn{margin:0}
+.loader{display:flex;align-items:center;gap:12px;justify-content:center;padding:24px}
+.spin{width:26px;height:26px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--acc);animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+/* trilha e carreiras */
+.path{position:relative;padding-left:52px}
+.path::before{content:'';position:absolute;left:19px;top:0;bottom:0;border-left:3px dotted var(--gld-ink);opacity:.55}
+.sc{position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.sc .dot{position:absolute;left:-52px;top:10px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#fff;font-size:1.2rem;box-shadow:0 0 0 4px var(--bg)}
+.sc .dot.ok{background:linear-gradient(135deg,#0b6b36,#067a73)}.sc .dot.lock{background:#6b5a99}
+.sc.lock{opacity:.8}.sc h3{margin:0 0 2px}
+.sc .hd{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;text-align:left;cursor:pointer;padding:0;min-height:44px}
+.sc .hd .tt{flex:1}
+.pg{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}.pg i{display:block;height:100%;background:linear-gradient(90deg,#067a73,#7a35e6)}
+.actl{display:grid;gap:8px;margin-top:10px}
+.act{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--chip)}
+.act.done{background:var(--okb);border-color:var(--ok-t)}
+.act .ah{display:flex;gap:10px;align-items:flex-start}
+.act input[type=checkbox]{width:22px;height:22px;margin-top:3px;accent-color:#7a35e6;flex:none}
+.act .nm{font-weight:700}
+.res{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}
+.res li{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.cc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.cc.sel{border-color:var(--gld-ink);box-shadow:0 0 0 2px var(--gld)}
+.cc h3{margin:0}.cc .em{font-size:30px}
+.pct{font-weight:800;font-size:1.3rem}
+.fit{height:10px;border-radius:6px;background:var(--line);overflow:hidden}.fit i{display:block;height:100%;background:linear-gradient(90deg,#067a73,#7a35e6)}
+.dom{display:grid;gap:8px;margin:8px 0}.dom .dr{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:8px;align-items:center}
+.dbar{height:12px;border-radius:7px;background:var(--line);overflow:hidden;grid-column:1/-1}.dbar i{display:block;height:100%;background:#7a35e6}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--acc);font-weight:700;cursor:pointer;min-height:44px;padding:0}
+.tw{overflow-x:auto}
+table.tb{width:100%;border-collapse:collapse}table.tb th,table.tb td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}
+/* calendário */
+.calbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}.calbar .btn{margin-top:0}
+.calbar h2{margin:0;font-size:1.15rem;flex:1;min-width:170px}
+.tot{display:flex;flex-wrap:wrap;gap:8px 18px;margin:6px 0 10px}.tot b{font-weight:800}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.9rem;margin:8px 0}.leg span{display:inline-flex;align-items:center;gap:6px}.leg i{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--bd);display:inline-block}
+.calw{overflow-x:auto;border:2px solid var(--line);border-radius:16px;background:var(--card)}
+.cal{--ph:44px;display:grid;grid-template-columns:48px repeat(var(--n),minmax(112px,1fr));min-width:calc(48px + var(--n)*112px)}
+.cal.d1{min-width:0;grid-template-columns:48px minmax(0,1fr)}
+.ch{position:sticky;top:0;background:var(--card);border-bottom:2px solid var(--line);padding:6px 4px;text-align:center;font-weight:700;font-size:.9rem;z-index:3}
+.ch small{display:block;font-weight:400;color:var(--mut)}.ch.today{color:var(--acc)}
+.ax{position:relative}.ax span{position:absolute;right:6px;font-size:.78rem;color:var(--mut);transform:translateY(-50%)}
+.col{position:relative;border-left:1px solid var(--line);background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% var(--ph)}
+.col.t{background-color:rgba(242,201,138,.08)}
+.band{position:absolute;left:3px;right:3px;border-radius:8px;pointer-events:none}
+.band.av2{background:var(--avail);border:1px solid var(--bd)}
+.band.fr{background:var(--free);border:1.5px dashed var(--ok-t);display:flex;align-items:flex-start;justify-content:center;font-size:.78rem;font-weight:700;color:var(--ok-t);padding-top:2px}
+.offd{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 7px,var(--hatch) 7px 8px);display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-size:.82rem;font-weight:700;color:var(--mut);pointer-events:none}
+.blk{position:absolute;left:5px;right:5px;border-radius:10px;border:2px solid var(--k1-b);background:var(--k1-bg);color:var(--k1-t);padding:2px 6px;font-size:.82rem;text-align:left;cursor:grab;overflow:hidden;touch-action:none;line-height:1.25;z-index:2;user-select:none}
+.blk.k-pomodoro{background:var(--k2-bg);color:var(--k2-t);border-color:var(--k2-b)}
+.blk.k-simulado{background:var(--k3-bg);color:var(--k3-t);border-color:var(--k3-b)}
+.blk.done{opacity:.72;text-decoration:line-through}
+.blk.late{border-style:dashed;border-color:var(--warn-t)}
+.blk.out{border-style:dotted;filter:saturate(.5)}
+.blk.drag{cursor:grabbing;z-index:5;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.blk b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blk .rz{position:absolute;left:0;right:0;bottom:0;height:10px;cursor:ns-resize}.blk .rz::after{content:'';position:absolute;left:50%;bottom:3px;width:26px;height:3px;border-radius:2px;background:currentColor;opacity:.55;transform:translateX(-50%)}
+.pendl{display:grid;gap:8px}.pitem{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card)}
+.empty{text-align:center;padding:26px 12px;border:2px dashed var(--bd);border-radius:18px;background:var(--chip)}
+/* foco */
+.tmr{display:grid;place-items:center;padding:8px 0}
+.ringw{position:relative;width:220px;height:220px}.ringw svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ringw .tm{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums}
+.ringw .tm small{display:block;font-size:.95rem;font-weight:600;color:var(--mut)}
+.mood{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+.mood .tg{border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px}.mood .tg span{font-size:1.6rem}
+.brt{width:150px;height:150px;border-radius:50%;margin:12px auto;background:var(--chip);border:3px solid var(--gld);display:grid;place-items:center;font-weight:800;text-align:center;transition:transform 4s ease-in-out}
+.brt.in{transform:scale(1.25)}
+/* progresso */
+.lvb{height:16px;border-radius:9px;background:var(--line);overflow:hidden}.lvb i{display:block;height:100%;background:linear-gradient(90deg,#c42a86,#f2c98a)}
+.achg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.ach{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card);display:flex;gap:10px;align-items:flex-start}
+.ach .em{font-size:28px}.ach.lk{background:var(--chip)}.ach.lk .em{filter:grayscale(1);opacity:.55}
+.big{font-size:2rem;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.stats .c{margin:0;text-align:center}
+/* mentora */
+#fab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:15;height:56px;padding:0 20px;border-radius:999px;border:0;border-bottom:5px solid var(--accd);background:var(--grad);color:#fff;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 8px 20px rgba(60,20,140,.35)}
+#mentor{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:40;background:var(--card);border-left:2px solid var(--gld);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);box-shadow:-10px 0 30px rgba(0,0,0,.3)}
+#mentor header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--night3);color:var(--on-night)}
+#mentor header h2{margin:0;font-size:1.15rem;flex:1;color:var(--gld2)}
+#mentor header .ib{background:var(--night2);color:var(--on-night);border-color:rgba(242,201,138,.5)}
+#msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:92%;padding:10px 14px;border-radius:16px;background:var(--chip);border:1.5px solid var(--line);overflow-wrap:anywhere}
+.msg.me{align-self:flex-end;background:var(--k1-bg);border-color:var(--k1-b);color:var(--k1-t)}
+.msg a{color:var(--acc)}.msg.me a{color:inherit}
+.sugs{display:flex;flex-wrap:wrap;gap:8px;padding:0 14px 8px}
+#mform{display:flex;gap:8px;padding:10px 14px calc(12px + env(safe-area-inset-bottom,0px));border-top:1.5px solid var(--line)}
+#mform input{flex:1}#mform .btn{margin:0;padding:8px 16px}
+.msg .typing{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc);margin-right:3px;animation:tw 1s infinite}
+/* modal e toasts */
+.ovl{position:fixed;inset:0;z-index:60;background:rgba(10,4,30,.62);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.dlg{background:var(--card);color:var(--ink);border:2px solid var(--gld);border-radius:20px;padding:20px;width:min(480px,100%);max-height:calc(100vh - 32px);overflow:auto}
+.dlg.wide{width:min(720px,100%)}.dlg h2{font-size:1.3rem}
+.dact{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:14px}.dact .btn{margin-top:0}
+#toasts{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(92vw,460px);pointer-events:none}
+.toast{pointer-events:auto;background:#2b1458;color:#fff;border:1.5px solid var(--gld);border-radius:999px;padding:10px 18px;font-weight:600;display:flex;gap:12px;align-items:center}
+.toast button{background:var(--gld);color:#2a1450;border:0;border-radius:999px;padding:4px 12px;font-weight:800;cursor:pointer;min-height:32px}
+/* mobile */
+@media (max-width:860px){
+ #side{position:fixed;top:auto;bottom:0;left:0;right:0;width:auto;height:auto;flex-direction:row;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));gap:2px;z-index:20;border-right:0;border-top:1px solid var(--gldg);overflow:visible}
+ .logo{display:none}
+ #side nav{flex-direction:row;overflow-x:auto;flex:1;min-width:0;gap:2px;scrollbar-width:thin}
+ .nv{flex-direction:column;gap:2px;padding:6px 4px;font-size:.7rem;flex:0 0 74px;align-items:center;text-align:center;min-height:56px}
+ .nv span{font-size:1.25rem}
+ #top{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));gap:8px}
+ .av{display:none}.chp{padding:6px 9px;font-size:.9rem}.ib{width:44px;height:44px}
+ #app{padding-bottom:120px}
+ .hero{padding:24px 18px}.hero h1{font-size:2rem}
+ #fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ #toasts{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+ body.onb #app{padding-bottom:40px}
+}
+@media (max-width:700px){.hero{padding:26px 22px}.hero .bk{display:none}.hero p{max-width:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<a class="skip" href="#app">Pular para o conteúdo</a>
+<div id="sky" aria-hidden="true"></div>
+<div id="shell">
+ <aside id="side">
+  <a class="logo" href="#inicio" aria-label="Git Girls, ir para o início">
+   <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#f2c98a" stroke-width="1.5"/><circle cx="32" cy="32" r="22" fill="#241552" stroke="#f2c98a" stroke-opacity=".5"/><path d="M22 40a7 7 0 0 1 1-13.9A9 9 0 0 1 40.6 24 6.5 6.5 0 0 1 42 40z" fill="#f2c98a"/><path d="M46 14l1.6 4.4L52 20l-4.4 1.6L46 26l-1.6-4.4L40 20l4.4-1.6z" fill="#f7dcb0"/></svg>
+   <b>Git Girls</b><small>carreira em cloud, no seu ritmo</small>
+  </a>
+  <nav aria-label="Menu principal">
+   <button type="button" class="nv" data-p="inicio"><span aria-hidden="true">🏠</span><b>Início</b></button>
+   <button type="button" class="nv" data-p="carreiras"><span aria-hidden="true">🧭</span><b>Carreiras</b></button>
+   <button type="button" class="nv" data-p="trilha"><span aria-hidden="true">🗺️</span><b>Trilha</b></button>
+   <button type="button" class="nv" data-p="calendario"><span aria-hidden="true">📅</span><b>Calendário</b></button>
+   <button type="button" class="nv" data-p="certificacoes"><span aria-hidden="true">🏅</span><b>Certificações</b></button>
+   <button type="button" class="nv" data-p="oportunidades"><span aria-hidden="true">💼</span><b>Oportunidades</b></button>
+   <button type="button" class="nv" data-p="foco"><span aria-hidden="true">🍅</span><b>Foco</b></button>
+   <button type="button" class="nv" data-p="progresso"><span aria-hidden="true">⭐</span><b>Progresso</b></button>
+   <button type="button" class="nv" data-p="ajustes"><span aria-hidden="true">⚙️</span><b>Ajustes</b></button>
+  </nav>
+ </aside>
+ <div id="main">
+  <header id="top">
+   <div class="srch"><span aria-hidden="true">🔍</span><input id="q" type="text" placeholder="Buscar carreiras e certificações" autocomplete="off" aria-label="Buscar carreiras, certificações e competências"><div id="res"></div></div>
+   <button type="button" class="ib" id="tt" aria-label="Mudar o tema">🌙</button>
+   <span class="chp" id="sx">⭐ 0</span><span class="chp" id="sk">🔥 0</span>
+   <button type="button" class="av" id="av" aria-label="Abrir meu perfil">👩‍💻</button>
+  </header>
+  <main id="app" tabindex="-1"></main>
+ </div>
+</div>
+<button type="button" id="fab" aria-haspopup="dialog" aria-label="Abrir a mentora com IA">💬 Mentora</button>
+<section id="mentor" role="dialog" aria-label="Mentora com IA" hidden></section>
+<div id="modal-root"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+<div id="live" class="sr" aria-live="polite"></div>
+<div id="gpop" role="tooltip" hidden></div>
+<script>
+/* ===== Catálogo curado (versão 1). A IA só escolhe e ordena itens daqui. ===== */
+const AREAS={dados:{n:'Dados',e:'📊'},infra:{n:'Infraestrutura',e:'🏗️'},dev:{n:'Desenvolvimento',e:'💻'},seg:{n:'Segurança',e:'🔐'},ia:{n:'IA',e:'🤖'}};
+const LEVELS=['Não conheço','Conheço o básico','Uso no dia a dia','Domino'];
+const ST=['Fundamentos','Prática','Especialização','Certificação','Portfólio','Oportunidades'];
+const R=(t,type,kind,url,h)=>({t,type,kind,url,h});
+const SK={
+cloud:{n:'Conceitos de nuvem',a:'infra',st:0,res:[R('O que é computação em nuvem (AWS)','gratuito','guia','https://aws.amazon.com/pt/what-is-cloud-computing/',1),R('AWS Skill Builder: trilhas introdutórias','freemium','plataforma','https://skillbuilder.aws/',6),R('Coursera: busque "Cloud Computing"','pago','plataforma','https://www.coursera.org/',10)]},
+linux:{n:'Linux e terminal',a:'infra',st:0,res:[R('Linux Journey','gratuito','curso','https://linuxjourney.com/',8),R('Roadmap de Linux (roadmap.sh)','gratuito','guia','https://roadmap.sh/linux',2)]},
+redes:{n:'Redes (DNS, IP, portas)',a:'infra',st:0,res:[R('Cloudflare Learning Center','gratuito','guia','https://www.cloudflare.com/learning/',4),R('Microsoft Learn: trilhas de treinamento','gratuito','plataforma','https://learn.microsoft.com/pt-br/training/',5)]},
+git:{n:'Git e GitHub',a:'dev',st:0,res:[R('Pro Git (português)','gratuito','documentação','https://git-scm.com/book/pt-br/v2',6),R('GitHub Skills','gratuito','curso','https://skills.github.com/',4)]},
+python:{n:'Python',a:'dev',st:0,res:[R('Tutorial oficial de Python','gratuito','documentação','https://docs.python.org/pt-br/3/tutorial/',8),R('Kaggle Learn: Python','gratuito','curso','https://www.kaggle.com/learn/python',5),R('Alura: trilhas de Python','pago','plataforma','https://www.alura.com.br/',20)]},
+sql:{n:'SQL',a:'dados',st:0,res:[R('Kaggle Learn: Intro to SQL','gratuito','curso','https://www.kaggle.com/learn/intro-to-sql',3),R('W3Schools: SQL','gratuito','guia','https://www.w3schools.com/sql/',5),R('Udemy: busque "SQL para análise de dados"','pago','plataforma','https://www.udemy.com/',12)]},
+api:{n:'APIs e HTTP',a:'dev',st:0,res:[R('MDN: HTTP','gratuito','documentação','https://developer.mozilla.org/pt-BR/docs/Web/HTTP',4),R('Roadmap de backend (roadmap.sh)','gratuito','guia','https://roadmap.sh/backend',2)]},
+docker:{n:'Contêineres (Docker)',a:'infra',st:1,res:[R('Docker: Get started','gratuito','documentação','https://docs.docker.com/get-started/',4),R('Roadmap de Docker (roadmap.sh)','gratuito','guia','https://roadmap.sh/docker',2)]},
+cicd:{n:'CI/CD e automação',a:'infra',st:1,res:[R('Documentação do GitHub Actions','gratuito','documentação','https://docs.github.com/pt/actions',4),R('Roadmap de DevOps (roadmap.sh)','gratuito','guia','https://roadmap.sh/devops',2)]},
+serverless:{n:'Serverless (funções)',a:'dev',st:1,res:[R('AWS Lambda: guia do desenvolvedor','gratuito','documentação','https://docs.aws.amazon.com/lambda/latest/dg/welcome.html',4),R('AWS Skill Builder','freemium','plataforma','https://skillbuilder.aws/',4)]},
+etl:{n:'Pipelines de dados (ETL)',a:'dados',st:1,res:[R('AWS Glue: o que é','gratuito','documentação','https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html',4),R('AWS Skill Builder','freemium','plataforma','https://skillbuilder.aws/',6)]},
+dw:{n:'Data warehouse',a:'dados',st:1,res:[R('Amazon Redshift: primeiros passos','gratuito','documentação','https://docs.aws.amazon.com/redshift/latest/gsg/getting-started.html',4)]},
+bi:{n:'BI e visualização',a:'dados',st:1,res:[R('Kaggle Learn: Data Visualization','gratuito','curso','https://www.kaggle.com/learn/data-visualization',4),R('Microsoft Learn: Power BI','gratuito','curso','https://learn.microsoft.com/training/powerplatform/power-bi',6)]},
+stats:{n:'Estatística básica',a:'ia',st:1,res:[R('Khan Academy: Estatística e probabilidade','gratuito','curso','https://pt.khanacademy.org/math/statistics-probability',10)]},
+iac:{n:'Infraestrutura como código',a:'infra',st:1,res:[R('Terraform: tutoriais oficiais','gratuito','curso','https://developer.hashicorp.com/terraform/tutorials',8)]},
+monit:{n:'Monitoramento e observabilidade',a:'infra',st:1,res:[R('Amazon CloudWatch: o que é','gratuito','documentação','https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html',3),R('Roadmap de DevOps (roadmap.sh)','gratuito','guia','https://roadmap.sh/devops',2)]},
+iam:{n:'Identidade e acesso (IAM)',a:'seg',st:1,res:[R('AWS IAM: guia do usuário','gratuito','documentação','https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html',3),R('AWS Skill Builder','freemium','plataforma','https://skillbuilder.aws/',4)]},
+seg:{n:'Segurança básica',a:'seg',st:0,res:[R('OWASP Top 10','gratuito','guia','https://owasp.org/www-project-top-ten/',3),R('Roadmap de cibersegurança (roadmap.sh)','gratuito','guia','https://roadmap.sh/cyber-security',2)]},
+k8s:{n:'Kubernetes',a:'infra',st:2,res:[R('Kubernetes: tutoriais oficiais','gratuito','curso','https://kubernetes.io/pt-br/docs/tutorials/',8),R('Roadmap de Kubernetes (roadmap.sh)','gratuito','guia','https://roadmap.sh/kubernetes',2),R('Coursera: busque "Kubernetes"','pago','plataforma','https://www.coursera.org/',12)]},
+lgpd:{n:'LGPD e privacidade',a:'seg',st:2,res:[R('ANPD: Autoridade Nacional de Proteção de Dados','gratuito','guia','https://www.gov.br/anpd/pt-br',2),R('Lei Geral de Proteção de Dados (texto da lei)','gratuito','documentação','https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm',2)]},
+ml:{n:'Machine learning',a:'ia',st:2,res:[R('Google: Machine Learning Crash Course','gratuito','curso','https://developers.google.com/machine-learning/crash-course?hl=pt-br',15),R('Kaggle Learn: Intro to Machine Learning','gratuito','curso','https://www.kaggle.com/learn/intro-to-machine-learning',3),R('Coursera: busque "Machine Learning"','pago','plataforma','https://www.coursera.org/',30)]},
+genai:{n:'IA generativa',a:'ia',st:2,res:[R('Hugging Face Learn','gratuito','curso','https://huggingface.co/learn',10),R('DeepLearning.AI: short courses','gratuito','curso','https://www.deeplearning.ai/short-courses/',2)]}
+};
+Object.keys(SK).forEach(k=>{SK[k].id=k;SK[k].h=SK[k].res[0].h});
+
+/* Mini-testes: [pergunta, certa, errada1, errada2, errada3]. As alternativas são embaralhadas na tela. */
+const QZ={
+cloud:[['O que significa elasticidade na nuvem?','Aumentar ou reduzir recursos conforme a demanda','Guardar dados por muitos anos','Usar só servidores físicos','Pagar um valor fixo por ano'],['Qual modelo entrega máquinas virtuais e rede sob demanda?','IaaS','SaaS','DaaS','On-premises'],['No modelo de responsabilidade compartilhada, quem cuida da segurança física dos data centers?','O provedor de nuvem','A cliente','O provedor de internet','Ninguém'],['Uma região de nuvem é:','Uma área geográfica com várias zonas de disponibilidade','Um único servidor','Um tipo de banco de dados','Um plano de preços']],
+linux:[['Qual comando lista os arquivos de uma pasta?','ls','cd','rm','cat'],['Qual comando muda as permissões de um arquivo?','chmod','grep','pwd','echo'],['Para acompanhar um log em tempo real:','tail -f','head -n 5','wc -l','sort'],['O que faz o | (pipe) no terminal?','Envia a saída de um comando como entrada do próximo','Apaga o arquivo','Comenta uma linha','Cria um atalho']],
+redes:[['Qual protocolo traduz nomes de sites em endereços IP?','DNS','DHCP','SMTP','FTP'],['Qual a porta padrão do HTTPS?','443','80','22','3306'],['Uma sub-rede (subnet) serve para:','Dividir uma rede em partes menores','Criptografar e-mails','Medir a velocidade do Wi-Fi','Guardar senhas'],['Qual a função de um firewall?','Filtrar o tráfego conforme regras','Compilar código','Armazenar backups','Gerar relatórios']],
+git:[['Qual comando salva alterações no histórico local?','git commit','git clone','git fetch','git init'],['Para que serve um branch?','Trabalhar em uma linha paralela sem afetar a principal','Apagar o repositório','Compactar arquivos','Trocar a senha'],['Qual comando baixa um repositório remoto pela primeira vez?','git clone','git push','git add','git log'],['Um pull request propõe:','Juntar as mudanças de um branch ao outro, com revisão','Apagar commits','Reiniciar o servidor','Trocar o idioma do código']],
+python:[['Qual estrutura guarda pares chave-valor?','Dicionário (dict)','Tupla','String','range'],['O que `len([1, 2, 3])` retorna?','3','2','4','Dá erro'],['Para repetir algo para cada item de uma lista usamos:','for','def','import','try'],['Qual gerenciador instala bibliotecas Python?','pip','npm','apt','brew cask']],
+sql:[['Qual comando consulta dados?','SELECT','INSERT','DROP','GRANT'],['O que faz GROUP BY?','Agrupa linhas para somar, contar ou calcular médias','Ordena em ordem alfabética','Apaga linhas duplicadas','Cria um índice'],['Qual JOIN traz só as linhas com correspondência nas duas tabelas?','INNER JOIN','LEFT JOIN','CROSS JOIN','FULL JOIN'],['A cláusula WHERE serve para:','Filtrar linhas','Ordenar resultados','Nomear colunas','Criar tabelas']],
+api:[['Qual método HTTP costuma buscar dados sem alterá-los?','GET','POST','DELETE','PUT'],['O código 404 significa:','Recurso não encontrado','Sucesso','Erro no servidor','Não autorizado'],['JSON é:','Um formato de texto para trocar dados','Um banco de dados','Uma linguagem de programação','Um protocolo de rede'],['Para que serve um token de API?','Identificar e autorizar quem faz a chamada','Compactar a resposta','Escolher a cor da página','Aumentar a velocidade da internet']],
+docker:[['Uma imagem Docker é:','Um modelo imutável para criar contêineres','Uma foto do servidor','Um tipo de VPN','Um banco de dados'],['Qual arquivo descreve como construir uma imagem?','Dockerfile','docker.json','image.yml','build.txt'],['Comparados a máquinas virtuais, contêineres costumam ser:','Mais leves, pois compartilham o kernel do host','Mais pesados','Sem nenhum isolamento','Exclusivos do Windows'],['Qual comando executa um contêiner?','docker run','docker login','docker pull -a','docker images']],
+k8s:[['Qual a menor unidade implantável no Kubernetes?','Pod','Node','Cluster','Namespace'],['O que um Deployment gerencia?','Réplicas e atualizações de pods','Apenas redes','Senhas','Backups'],['Qual objeto expõe pods com um endereço estável?','Service','ConfigMap','Secret','Volume'],['Qual ferramenta de linha de comando conversa com o cluster?','kubectl','gitctl','nodectl','podrun']],
+iac:[['Infraestrutura como código significa:','Criar e alterar infraestrutura por arquivos versionados','Escrever código sem testar','Usar só o console web','Comprar servidores físicos'],['Qual destas ferramentas é de IaC?','Terraform','Photoshop','Excel','Slack'],['Uma vantagem da IaC é:','Ambientes repetíveis e revisáveis','Dispensar o versionamento','Eliminar toda a segurança','Aumentar sempre os custos'],['No Terraform, o comando `plan` serve para:','Mostrar o que será alterado antes de aplicar','Apagar tudo','Fazer backup','Instalar o Git']],
+cicd:[['CI significa:','Integração contínua','Controle de infraestrutura','Código interno','Cloud isolada'],['Uma pipeline de CI/CD normalmente executa:','Build, testes e deploy automatizados','Só o envio de e-mails','Backups manuais','Edição de planilhas'],['Qual destas é uma ferramenta de CI/CD?','GitHub Actions','Figma','Notion','Zoom'],['Para que servem os testes automatizados na pipeline?','Detectar problemas antes do deploy','Deixar o deploy mais lento de propósito','Trocar o banco de dados','Substituir toda a revisão de código']],
+serverless:[['No modelo serverless você:','Não gerencia servidores e paga pelo uso','Compra os servidores','Instala o sistema operacional','Paga um valor fixo todo mês'],['O AWS Lambda executa:','Funções em resposta a eventos','Bancos relacionais','Redes privadas','Sistemas de e-mail'],['Um "cold start" é:','O atraso na primeira execução de uma função inativa','Uma falha de energia','Um tipo de backup','Um erro de sintaxe'],['Funções serverless costumam ser boas para:','Tarefas curtas disparadas por eventos','Processos contínuos de horas','Jogos 3D em tempo real','Armazenar arquivos grandes']],
+iam:[['O princípio do menor privilégio diz para:','Dar só as permissões necessárias','Dar acesso total a todas','Compartilhar a senha','Desativar os logs'],['Para que serve o MFA?','Exigir um segundo fator além da senha','Acelerar a rede','Compactar dados','Criar backups'],['Uma "role" no IAM é:','Um conjunto de permissões que pode ser assumido','Um tipo de disco','Um relatório de custos','Uma região'],['Boa prática para a conta root:','Não usar no dia a dia e proteger com MFA','Compartilhar com a equipe','Usar em scripts','Deixar sem senha']],
+seg:[['Criptografia em repouso protege:','Dados armazenados','Só o monitor','Apenas e-mails enviados','O teclado'],['Phishing é:','Um golpe que tenta enganar para roubar dados','Um tipo de backup','Um protocolo de rede','Uma linguagem de programação'],['Qual tecnologia protege o tráfego do HTTPS?','TLS','FTP','DHCP','ARP'],['Uma boa prática com senhas e chaves de acesso é:','Guardar em um cofre de segredos, nunca no código','Colocar no repositório público','Enviar por chat','Usar a mesma em tudo']],
+monit:[['Observabilidade usa três sinais principais:','Logs, métricas e traces','Fotos, vídeos e áudios','E-mails, chats e chamadas','Planilhas, slides e textos'],['Um alarme de monitoramento serve para:','Avisar quando uma métrica passa de um limite','Apagar logs','Criar usuários','Desligar a rede'],['Qual serviço da AWS coleta métricas e logs?','CloudWatch','S3 Glacier','Route 53','Lambda@Edge'],['SLO é:','Uma meta de nível de serviço, como 99,9% de disponibilidade','Um tipo de banco de dados','Uma linguagem de script','Um protocolo de e-mail']],
+lgpd:[['A LGPD trata de:','Proteção de dados pessoais','Direitos autorais','Impostos','Trânsito'],['Qual destes é um dado pessoal?','CPF','Temperatura média da cidade','Nome de uma biblioteca de código','Cotação do dólar'],['Uma base legal comum para tratar dados é:','O consentimento da pessoa titular','A curiosidade','A pressa','Um sorteio'],['A autoridade responsável pela LGPD no Brasil é a:','ANPD','ANATEL','ANVISA','ANEEL']],
+etl:[['ETL significa:','Extrair, transformar e carregar','Executar, testar e liberar','Editar, traduzir e listar','Enviar, trocar e ligar'],['Um pipeline em lote (batch) processa dados:','Em grupos, em intervalos definidos','Um a um, sempre instantaneamente','Só manualmente','Somente imagens'],['Qual serviço da AWS faz ETL sem servidores?','AWS Glue','Amazon Polly','AWS Shield','Amazon Lex'],['Idempotência em pipelines significa:','Rodar de novo sem duplicar nem corromper dados','Nunca falhar','Ser muito rápido','Usar sempre SQL']],
+dw:[['Um data warehouse serve para:','Fazer análises sobre dados históricos organizados','Hospedar sites','Enviar e-mails','Editar fotos'],['Qual destes é um data warehouse na AWS?','Amazon Redshift','Amazon Route 53','AWS Lambda','Amazon SQS'],['Em um modelo estrela, a tabela central guarda:','Fatos (as medidas)','Apenas nomes','Senhas','Logs de acesso'],['Particionar uma tabela ajuda a:','Ler menos dados nas consultas','Aumentar sempre o custo','Eliminar a segurança','Trocar o idioma']],
+bi:[['Qual gráfico mostra melhor a evolução ao longo do tempo?','Linha','Pizza com 15 fatias','Nuvem de palavras','Mapa sem eixos'],['Um KPI é:','Um indicador-chave de desempenho','Um tipo de banco de dados','Uma linguagem','Um protocolo'],['Qual destas é uma ferramenta de BI?','Power BI','Docker','Terraform','Git'],['Um bom dashboard deve:','Destacar o essencial de forma clara','Ter o máximo de gráficos possível','Usar muitas cores sem critério','Esconder a fonte dos dados']],
+stats:[['A média de 2, 4 e 9 é:','5','6','4','15'],['A mediana de 1, 3 e 100 é:','3','34','100','1'],['Correlação não implica:','Causalidade','Média','Variância','Amostra'],['O desvio padrão mede:','A dispersão dos dados','O total','O maior valor','A cor do gráfico']],
+ml:[['Aprendizado supervisionado usa:','Dados com rótulos (respostas conhecidas)','Nenhum dado','Apenas imagens','Apenas texto'],['Overfitting ocorre quando o modelo:','Decora o treino e vai mal em dados novos','Aprende rápido demais','Não usa dados','Usa GPU'],['Para avaliar um modelo usamos:','Dados de teste separados do treino','Os mesmos dados do treino','Dados aleatórios sem relação','Nenhum dado'],['Qual biblioteca de Python é muito usada em ML clássico?','scikit-learn','Bootstrap','jQuery','Express']],
+genai:[['Um LLM é:','Um modelo de linguagem treinado em grande volume de texto','Um banco relacional','Um protocolo de rede','Um editor de imagens'],['RAG combina:','Busca em documentos com geração de texto','Compressão com criptografia','Backup com restauração','Rede com firewall'],['Alucinação em IA generativa é:','Uma resposta que soa certa, mas é inventada','Uma falha de energia','Um erro de rede','Uma lentidão'],['Uma boa prática ao usar IA generativa é:','Revisar e validar as respostas importantes','Confiar sempre sem checar','Inserir dados sensíveis sem critério','Ignorar a fonte']]
+};
+
+/* Carreiras */
+const CAREERS=[
+{id:'eng-dados',n:'Engenheira de dados',a:'dados',e:'🛠️',sum:'Constrói os caminhos pelos quais os dados chegam prontos para análise.',day:'Monta e cuida de pipelines, garante a qualidade dos dados, otimiza consultas e conversa com os times de análise e de produto.',sk:['sql','python','etl','dw','git','cloud','iac'],tools:['Python','SQL','AWS Glue','Redshift','Airflow','Spark'],sen:'Júnior a sênior',grade:['Fundamentos de nuvem','SQL e modelagem de dados','Python para dados','Pipelines e orquestração','Data warehouse e data lake','Qualidade e governança de dados'],certs:['dea','clf','dp900'],ev:['aws-edu','devpost','pyladies'],proj:[['Pipeline de dados públicos na nuvem','Coletar um conjunto de dados aberto, transformar com Python e carregar em um data warehouse com um painel simples.',12],['Catálogo de qualidade de dados','Criar verificações automáticas (nulos, duplicados, faixas) e um relatório diário.',8]]},
+{id:'analista-dados',n:'Analista de dados em nuvem',a:'dados',e:'📈',sum:'Transforma dados em respostas claras para decisões.',day:'Consulta bases com SQL, monta dashboards, investiga números que mudaram e apresenta conclusões para quem decide.',sk:['sql','bi','stats','python','dw','cloud'],tools:['SQL','Power BI','Python','Excel','Athena','BigQuery'],sen:'Júnior a pleno',grade:['SQL do básico ao avançado','Estatística descritiva','Visualização e storytelling','Python com pandas','Fundamentos de nuvem','Modelagem para análise'],certs:['dp900','clf','cdl'],ev:['devpost','programaria','pyladies'],proj:[['Dashboard de indicadores públicos','Escolher uma base aberta, limpar, analisar e publicar um painel com 3 conclusões.',10],['Análise exploratória comentada','Um notebook com perguntas, gráficos e recomendações em linguagem simples.',8]]},
+{id:'cloud-eng',n:'Engenheira de nuvem',a:'infra',e:'☁️',sum:'Monta e mantém a infraestrutura onde os sistemas rodam.',day:'Cria redes e servidores na nuvem, automatiza com código, cuida de custos, disponibilidade e segurança básica.',sk:['cloud','linux','redes','iac','docker','cicd','monit'],tools:['AWS','Linux','Terraform','Docker','GitHub Actions','CloudWatch'],sen:'Júnior a sênior',grade:['Fundamentos de nuvem','Linux e redes','Infraestrutura como código','Contêineres','Automação e CI/CD','Monitoramento'],certs:['clf','saa'],ev:['aws-ug','aws-cb','devpost'],proj:[['Site estático com infraestrutura em código','Publicar um site na nuvem usando Terraform e uma pipeline de deploy.',12],['Painel de monitoramento','Criar alarmes e um painel de métricas para uma aplicação de exemplo.',8]]},
+{id:'devops',n:'DevOps / SRE',a:'infra',e:'🔁',sum:'Aproxima desenvolvimento e operação para entregar com segurança e rapidez.',day:'Cuida das pipelines de entrega, da confiabilidade dos serviços e da resposta a incidentes.',sk:['linux','git','docker','k8s','iac','cicd','monit'],tools:['Kubernetes','Docker','Terraform','GitHub Actions','Prometheus','Grafana'],sen:'Pleno a sênior',grade:['Linux avançado','Git e fluxos de trabalho','Contêineres e orquestração','IaC','CI/CD','Observabilidade e SLOs'],certs:['saa','clf'],ev:['aws-ug','gdg','devpost'],proj:[['Pipeline de entrega completa','Do commit ao deploy de um contêiner com testes automáticos e reversão simples.',14],['Cluster de estudo','Subir uma aplicação em Kubernetes local com monitoramento.',10]]},
+{id:'dev-cloud',n:'Desenvolvedora cloud',a:'dev',e:'💻',sum:'Cria aplicações pensadas para rodar na nuvem.',day:'Escreve código, integra serviços e APIs, usa funções serverless e cuida de testes e deploy.',sk:['python','api','git','serverless','docker','cloud','cicd'],tools:['Python','REST','AWS Lambda','Docker','GitHub','DynamoDB'],sen:'Júnior a sênior',grade:['Lógica e Python','APIs e HTTP','Git','Serverless','Contêineres','CI/CD'],certs:['dva','clf'],ev:['aws-edu','devpost','pyladies'],proj:[['API serverless de tarefas','Uma API com funções na nuvem, banco gerenciado e testes.',12],['Bot de avisos','Uma função agendada que busca dados públicos e envia um resumo.',6]]},
+{id:'seg-cloud',n:'Especialista em segurança em nuvem',a:'seg',e:'🛡️',sum:'Protege dados e acessos em ambientes de nuvem.',day:'Revisa permissões, monitora ameaças, cuida de criptografia e conformidade com a LGPD.',sk:['iam','seg','redes','monit','lgpd','linux','cloud'],tools:['IAM','CloudTrail','GuardDuty','WAF','KMS','SIEM'],sen:'Pleno a sênior',grade:['Fundamentos de nuvem','Redes seguras','Identidade e acesso','Criptografia e segredos','Monitoramento e resposta a incidentes','LGPD e conformidade'],certs:['scs','clf','saa'],ev:['aws-ug','programaria','devpost'],proj:[['Auditoria de permissões','Revisar uma conta de estudo, aplicar o menor privilégio e documentar os achados.',8],['Alertas de segurança','Configurar alertas para atividades suspeitas e um roteiro de resposta.',8]]},
+{id:'eng-ml',n:'Engenheira de machine learning',a:'ia',e:'🧠',sum:'Leva modelos de aprendizado de máquina do experimento à produção.',day:'Prepara dados, treina e avalia modelos, empacota e coloca para rodar com monitoramento.',sk:['python','stats','ml','docker','cloud','etl'],tools:['Python','scikit-learn','PyTorch','Docker','SageMaker','MLflow'],sen:'Pleno a sênior',grade:['Python e dados','Estatística','Machine learning clássico','Redes neurais','Empacotamento e serviço de modelos','Monitoramento de modelos'],certs:['aif','clf'],ev:['pyladies','devpost','gdg'],proj:[['Modelo de previsão publicado como API','Treinar um modelo simples, avaliar e servir por uma API em contêiner.',14],['Comparativo de modelos','Testar 3 modelos na mesma base e explicar qual escolher e por quê.',8]]},
+{id:'ia-gen',n:'Especialista em IA generativa',a:'ia',e:'✨',sum:'Cria produtos que usam modelos de linguagem de forma útil e segura.',day:'Desenha prompts e fluxos com busca em documentos, integra modelos por API e avalia qualidade e riscos.',sk:['python','api','genai','serverless','cloud','lgpd'],tools:['Python','APIs de LLM','RAG','Vetores','Serverless','Avaliação'],sen:'Júnior a sênior',grade:['Python e APIs','Fundamentos de IA generativa','RAG','Avaliação de respostas','IA responsável','Implantação na nuvem'],certs:['aif','clf'],ev:['gdg','devpost','pyladies'],proj:[['Assistente de perguntas sobre documentos','Um chat que responde com base em um conjunto de PDFs e mostra as fontes.',14],['Avaliador de respostas','Uma planilha de testes que mede qualidade e erros de um assistente.',8]]},
+{id:'arquiteta',n:'Arquiteta de soluções em nuvem',a:'infra',e:'🧭',sum:'Desenha como os sistemas se encaixam na nuvem, com custo, segurança e desempenho.',day:'Conversa com times e clientes, escolhe serviços, desenha arquiteturas e acompanha a implantação.',sk:['cloud','redes','iam','iac','serverless','dw','monit'],tools:['AWS','Diagramas de arquitetura','Terraform','Well-Architected','Custos (FinOps)'],sen:'Pleno a sênior',grade:['Fundamentos de nuvem','Redes e segurança','Serviços de computação e dados','Resiliência e custos','Infraestrutura como código','Comunicação técnica'],certs:['saa','clf'],ev:['aws-ug','aws-cb','gdg'],proj:[['Arquitetura de um sistema de exemplo','Desenhar, justificar e estimar o custo de uma aplicação em 3 camadas.',10],['Revisão de arquitetura','Avaliar uma arquitetura existente e propor 5 melhorias priorizadas.',8]]}
+];
+
+/* Certificações. Pesos dos domínios conforme o guia do exame na data da curadoria; confirme no site oficial. */
+const CERTS=[
+{id:'clf',n:'AWS Certified Cloud Practitioner',p:'AWS',lv:'Fundamental',a:['infra','dados','dev','seg','ia'],pre:'Nenhum. Indicada para começar.',dur:'90 min',cost:'US$ 100',url:'https://aws.amazon.com/certification/certified-cloud-practitioner/',dom:[['Conceitos de nuvem',24],['Segurança e conformidade',30],['Tecnologia e serviços de nuvem',34],['Faturamento, preços e suporte',12]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'aif',n:'AWS Certified AI Practitioner',p:'AWS',lv:'Fundamental',a:['ia','dados'],pre:'Nenhum. Conceitos de nuvem ajudam.',dur:'90 min',cost:'US$ 100',url:'https://aws.amazon.com/certification/certified-ai-practitioner/',dom:[['Fundamentos de IA e ML',20],['Fundamentos de IA generativa',24],['Aplicações de modelos de fundação',28],['IA responsável',14],['Segurança, conformidade e governança de IA',14]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'saa',n:'AWS Certified Solutions Architect – Associate',p:'AWS',lv:'Associado',a:['infra','seg','dev'],pre:'Recomendado: conceitos de nuvem e noções de redes.',dur:'130 min',cost:'US$ 150',url:'https://aws.amazon.com/certification/certified-solutions-architect-associate/',dom:[['Arquiteturas seguras',30],['Arquiteturas resilientes',26],['Alto desempenho',24],['Otimização de custos',20]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'dea',n:'AWS Certified Data Engineer – Associate',p:'AWS',lv:'Associado',a:['dados'],pre:'Recomendado: SQL, Python e noções de pipelines.',dur:'130 min',cost:'US$ 150',url:'https://aws.amazon.com/certification/certified-data-engineer-associate/',dom:[['Ingestão e transformação de dados',34],['Gerenciamento de armazenamento de dados',26],['Operação e suporte de dados',22],['Segurança e governança de dados',18]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'dva',n:'AWS Certified Developer – Associate',p:'AWS',lv:'Associado',a:['dev'],pre:'Recomendado: programação e APIs.',dur:'130 min',cost:'US$ 150',url:'https://aws.amazon.com/certification/certified-developer-associate/',dom:[['Desenvolvimento com serviços AWS',32],['Segurança',26],['Implantação',24],['Solução de problemas e otimização',18]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'scs',n:'AWS Certified Security – Specialty',p:'AWS',lv:'Especialista',a:['seg'],pre:'Recomendado: experiência prévia com segurança e AWS.',dur:'170 min',cost:'US$ 300',url:'https://aws.amazon.com/certification/certified-security-specialty/',dom:[['Detecção de ameaças e resposta a incidentes',14],['Registro e monitoramento de segurança',18],['Segurança de infraestrutura',20],['Gerenciamento de identidade e acesso',16],['Proteção de dados',18],['Governança de segurança',14]],lrn:['AWS Skill Builder','https://skillbuilder.aws/']},
+{id:'az900',n:'Microsoft Azure Fundamentals (AZ-900)',p:'Microsoft',lv:'Fundamental',a:['infra','dev','seg'],pre:'Nenhum.',dur:'cerca de 45 min',cost:'cerca de US$ 99 (varia por país)',url:'https://learn.microsoft.com/credentials/certifications/azure-fundamentals/',dom:[['Conceitos de nuvem',null],['Arquitetura e serviços do Azure',null],['Gerenciamento e governança',null]],lrn:['Microsoft Learn','https://learn.microsoft.com/pt-br/training/']},
+{id:'dp900',n:'Microsoft Azure Data Fundamentals (DP-900)',p:'Microsoft',lv:'Fundamental',a:['dados','ia'],pre:'Nenhum.',dur:'cerca de 45 min',cost:'cerca de US$ 99 (varia por país)',url:'https://learn.microsoft.com/credentials/certifications/azure-data-fundamentals/',dom:[['Conceitos de dados',null],['Dados relacionais no Azure',null],['Dados não relacionais no Azure',null],['Análise de dados no Azure',null]],lrn:['Microsoft Learn','https://learn.microsoft.com/pt-br/training/']},
+{id:'cdl',n:'Google Cloud Digital Leader',p:'Google Cloud',lv:'Fundamental',a:['dados','infra','ia'],pre:'Nenhum.',dur:'cerca de 90 min',cost:'cerca de US$ 99',url:'https://cloud.google.com/learn/certification/cloud-digital-leader',dom:[['Transformação digital com a nuvem',null],['Dados e inovação com IA',null],['Infraestrutura e modernização de aplicações',null],['Segurança e operações',null]],lrn:['Google Cloud Skills Boost','https://www.cloudskillsboost.google/']}
+];
+
+/* Comunidades, eventos e hackathons. As datas mudam: o link leva à página oficial. */
+const EVENTS=[
+{id:'devpost',n:'Hackathons online (Devpost)',t:'Hackathon',a:['dados','infra','dev','seg','ia'],url:'https://devpost.com/hackathons',when:'Datas variam. Veja a lista na página.',d:'Reúne hackathons abertos, muitos online e com times iniciantes.'},
+{id:'mlh',n:'Major League Hacking',t:'Hackathon',a:['dados','infra','dev','seg','ia'],url:'https://mlh.io/',when:'Calendário por temporada na página.',d:'Rede de hackathons para estudantes e iniciantes.'},
+{id:'aws-edu',n:'AWS Educate',t:'Curso e comunidade',a:['dados','infra','dev','seg','ia'],url:'https://aws.amazon.com/education/awseducate/',when:'Conteúdo disponível o ano todo.',d:'Aulas gratuitas de nuvem e trilhas de carreira.'},
+{id:'aws-ug',n:'AWS User Groups',t:'Comunidade',a:['infra','dados','dev','seg'],url:'https://aws.amazon.com/developer/community/usergroups/',when:'Encontros agendados pelos grupos locais.',d:'Grupos presenciais e online para trocar experiências.'},
+{id:'aws-cb',n:'AWS Community Builders',t:'Comunidade',a:['infra','dados','dev','seg','ia'],url:'https://aws.amazon.com/developer/community/community-builders/',when:'Inscrição conforme o programa abrir.',d:'Programa para quem compartilha conteúdo técnico sobre AWS.'},
+{id:'gdg',n:'Google Developer Groups',t:'Comunidade',a:['dev','ia','dados','infra'],url:'https://developers.google.com/community/gdg',when:'Eventos locais e online ao longo do ano.',d:'Comunidades de pessoas desenvolvedoras em várias cidades.'},
+{id:'programaria',n:'Programaria',t:'Comunidade para mulheres',a:['dev','dados','infra','seg','ia'],url:'https://www.programaria.org/',when:'Agenda divulgada no site.',d:'Comunidade brasileira que apoia mulheres em tecnologia.'},
+{id:'pyladies',n:'PyLadies Brasil',t:'Comunidade para mulheres',a:['dev','dados','ia'],url:'https://brasil.pyladies.com/',when:'Encontros divulgados pelos grupos locais.',d:'Grupo de mulheres que aprendem e ensinam Python.'}
+];
+
+/* Vagas-modelo: servem para demonstrar compatibilidade. Não são vagas reais. */
+const JOBS=[
+{id:'j1',t:'Analista de dados júnior',co:'Empresa exemplo A',mod:'remoto',loc:'Brasil',sen:'júnior',sk:['sql','bi','python','stats']},
+{id:'j2',t:'Engenheira de dados júnior',co:'Empresa exemplo B',mod:'híbrido',loc:'São Paulo, SP',sen:'júnior',sk:['sql','python','etl','cloud','git']},
+{id:'j3',t:'Engenheira de dados pleno',co:'Empresa exemplo C',mod:'remoto',loc:'Brasil',sen:'pleno',sk:['sql','python','etl','dw','iac','cloud']},
+{id:'j4',t:'Analista de infraestrutura cloud',co:'Empresa exemplo D',mod:'presencial',loc:'Belo Horizonte, MG',sen:'júnior',sk:['cloud','linux','redes','monit']},
+{id:'j5',t:'DevOps pleno',co:'Empresa exemplo E',mod:'remoto',loc:'Brasil',sen:'pleno',sk:['docker','k8s','cicd','iac','linux','git']},
+{id:'j6',t:'Desenvolvedora backend em nuvem',co:'Empresa exemplo F',mod:'híbrido',loc:'Recife, PE',sen:'pleno',sk:['python','api','serverless','docker','cloud','git']},
+{id:'j7',t:'Analista de segurança da informação',co:'Empresa exemplo G',mod:'híbrido',loc:'Rio de Janeiro, RJ',sen:'júnior',sk:['iam','seg','redes','lgpd','monit']},
+{id:'j8',t:'Engenheira de machine learning',co:'Empresa exemplo H',mod:'remoto',loc:'Brasil',sen:'sênior',sk:['python','ml','stats','docker','cloud']},
+{id:'j9',t:'Estágio em cloud e dados',co:'Empresa exemplo I',mod:'presencial',loc:'Porto Alegre, RS',sen:'estágio',sk:['cloud','sql','python']},
+{id:'j10',t:'Pessoa desenvolvedora de IA generativa',co:'Empresa exemplo J',mod:'remoto',loc:'Brasil',sen:'pleno',sk:['python','genai','api','cloud','lgpd']}
+];
+const JOB_SOURCES=[['LinkedIn Vagas',k=>'https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(k)],['Gupy',k=>'https://portal.gupy.io/job-search/term='+encodeURIComponent(k)],['Indeed Brasil',k=>'https://br.indeed.com/jobs?q='+encodeURIComponent(k)]];
+
+/* Glossário (toque ou foque no termo sublinhado) */
+const GLOSS={
+'nuvem':'Servidores e serviços de computação que você usa pela internet, pagando pelo que usa, sem comprar equipamento.',
+'IAM':'Gerenciamento de identidade e acesso: define quem pode fazer o quê em um ambiente de nuvem.',
+'MFA':'Autenticação em dois fatores: além da senha, você confirma com um código ou app.',
+'ETL':'Extrair, transformar e carregar: o processo de pegar dados de uma origem, arrumar e guardar onde serão analisados.',
+'pipeline':'Sequência automática de etapas, como coletar, limpar e guardar dados, ou compilar, testar e publicar um sistema.',
+'data warehouse':'Banco organizado para análises sobre dados históricos.',
+'IaC':'Infraestrutura como código: criar servidores e redes por arquivos de texto, versionados e repetíveis.',
+'CI/CD':'Integração e entrega contínuas: testes e publicação automáticos a cada mudança no código.',
+'serverless':'Modelo em que você escreve funções e o provedor cuida dos servidores. Você paga pelo uso.',
+'contêiner':'Pacote leve que reúne um programa e tudo de que ele precisa para rodar em qualquer lugar.',
+'Kubernetes':'Sistema que organiza e mantém muitos contêineres rodando.',
+'LGPD':'Lei Geral de Proteção de Dados: regras sobre como dados pessoais podem ser usados no Brasil.',
+'RAG':'Técnica em que o modelo de IA busca trechos de documentos antes de responder, para se basear em fontes.',
+'Pomodoro':'Técnica de estudo com ciclos de foco (25 min) e pausas curtas (5 min).',
+'observabilidade':'Capacidade de entender o que acontece em um sistema por meio de logs, métricas e traces.',
+'FinOps':'Prática de acompanhar e reduzir custos de nuvem.'
+};
+const CAT_URLS=new Set();
+Object.values(SK).forEach(s=>s.res.forEach(r=>CAT_URLS.add(r.url)));
+CERTS.forEach(c=>{CAT_URLS.add(c.url);CAT_URLS.add(c.lrn[1])});EVENTS.forEach(e=>CAT_URLS.add(e.url));
+const PTS={act:20,test:30,pomo:10,stage:100,sim:15,block:15,cert:200,profile:25,ob:10};
+const LVN=['Faísca','Estrela','Cometa','Constelação','Aurora','Nebulosa','Galáxia','Universo'];
+const ACH=[
+{id:'first-act',n:'Primeira atividade',d:'Conclua uma atividade da trilha.',e:'🌱'},
+{id:'first-stage',n:'Primeira etapa',d:'Conclua todas as atividades de uma etapa.',e:'🏁'},
+{id:'streak7',n:'Sequência de 7 dias',d:'Estude 7 dias seguidos.',e:'🔥'},
+{id:'first-test',n:'Conhecimento validado',d:'Passe em um mini-teste.',e:'🎯'},
+{id:'first-pomo',n:'Primeiro ciclo de foco',d:'Complete um ciclo Pomodoro.',e:'🍅'},
+{id:'planner',n:'Semana organizada',d:'Conclua 3 blocos do calendário.',e:'📅'},
+{id:'sim',n:'Simulado registrado',d:'Registre o resultado de um simulado.',e:'📝'},
+{id:'cert',n:'Certificação concluída',d:'Marque uma certificação como concluída.',e:'🏆'}
+];
+
+/* ===== Núcleo: utilidades, estado, pontos, modais, glossário, rotas ===== */
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const app=$('#app');
+const DAYS=['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],DS=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+const pad=n=>String(n).padStart(2,'0');
+const hm=m=>pad(Math.floor(m/60))+':'+pad(m%60);
+const hmToMin=s=>{const p=String(s).split(':').map(Number);return (p[0]||0)*60+(p[1]||0)};
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const pISO=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const addD=(d,n)=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()+n);return x};
+const dow=d=>(d.getDay()+6)%7;
+const wStart=d=>addD(d,-dow(d));
+const fmtH=min=>{min=Math.round(min);const h=Math.floor(min/60),m=min%60;return h?(m?h+'h'+pad(m):h+'h'):m+'min'};
+const fmtDate=d=>d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+const fmtShort=d=>pad(d.getDate())+'/'+pad(d.getMonth()+1);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const sumRanges=r=>r.reduce((t,x)=>t+(x[1]-x[0]),0);
+const uid=()=>Math.random().toString(36).slice(2,9);
+document.documentElement.lang='pt-BR';
+
+/* ---------- Estado ---------- */
+const KEY='aurora-cloud-v1';
+const DEF=()=>({v:1,step:'welcome',obDone:false,profOk:false,
+ ans:{moment:'',study:'',exp:'',goals:[],interests:[],noGoal:false,noInt:false,hours:6,avail:[[],[],[],[],[],[],[]],off:[false,false,false,false,false,false,false],skills:{},cv:[]},
+ profile:null,goal:null,mastered:{},done:{},prog:{},extra:[],xp:0,streak:0,last:'',awarded:{},ach:{},plan:null,sims:[],
+ blocks:[],planned:{},load:1,pom:{focus:25,short:5,long:15,every:4,sound:true,visual:true,cycles:0},run:{mins:0,end:0},
+ moods:[],rank:{on:false,nick:''},consent:{cv:false,rank:false},ratings:{},chat:[],hist:[],theme:null,ai:[]});
+let S=DEF();
+try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw),d=DEF();S=Object.assign(d,o);S.ans=Object.assign(d.ans,o.ans||{});S.pom=Object.assign(DEF().pom,o.pom||{});S.consent=Object.assign(DEF().consent,o.consent||{});S.rank=Object.assign(DEF().rank,o.rank||{})}}catch(e){}
+let saveT=0;
+function save(){clearTimeout(saveT);saveT=setTimeout(saveNow,150)}
+function saveNow(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+window.addEventListener('pagehide',saveNow);
+const UI={calView:matchMedia('(max-width:600px)').matches?'dia':'semana',calDate:new Date(),careerOpen:null,certOpen:null,oppTab:'vagas',stageOpen:null,flt:{mod:'',sen:'',loc:'',area:''}};
+
+/* ---------- Avisos, modais e acessibilidade ---------- */
+function say(m){const l=$('#live');l.textContent='';setTimeout(()=>l.textContent=m,30)}
+function toast(msg,act){const t=document.createElement('div');t.className='toast';const s=document.createElement('span');s.textContent=msg;t.appendChild(s);
+ if(act){const b=document.createElement('button');b.type='button';b.textContent=act.label;b.onclick=()=>{t.remove();act.fn()};t.appendChild(b)}
+ const tw=$('#toasts');while(tw.children.length>=2)tw.firstChild.remove();tw.appendChild(t);setTimeout(()=>t.remove(),act?8000:3600)}
+function modal(o){
+ const root=$('#modal-root'),prev=document.activeElement,id='dt'+uid(),el=document.createElement('div');el.className='ovl';
+ el.innerHTML=`<div class="dlg${o.wide?' wide':''}" role="dialog" aria-modal="true" aria-labelledby="${id}"><h2 id="${id}">${esc(o.title)}</h2><div class="dbody">${g(o.body||'')}</div><div class="dact"></div></div>`;
+ const box=$('.dlg',el),act=$('.dact',el);
+ const api={el,close(){el.remove();document.removeEventListener('keydown',kd,true);if(prev&&prev.focus&&document.contains(prev))prev.focus();o.onClose&&o.onClose()}};
+ (o.actions||[]).forEach(a=>{const b=document.createElement('button');b.type='button';b.className='btn '+(a.cls||'ghost');b.textContent=a.label;if(a.id)b.id=a.id;
+  b.onclick=async()=>{const r=a.fn?await a.fn(api):undefined;if(r!==false&&a.keep!==true)api.close()};act.appendChild(b)});
+ function kd(e){if(e.key==='Escape'){e.stopPropagation();api.close();return}
+  if(e.key==='Tab'){const f=$$('button,input,select,textarea,a[href],[tabindex]:not([tabindex="-1"])',box).filter(x=>!x.disabled&&x.offsetParent!==null);if(!f.length)return;const a=f[0],z=f[f.length-1];
+   if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}}
+ document.addEventListener('keydown',kd,true);
+ el.addEventListener('mousedown',e=>{if(e.target===el)api.close()});
+ root.appendChild(el);
+ const first=$('input,select,textarea',box)||$('.dact button:last-child',box)||box;setTimeout(()=>first.focus&&first.focus(),20);
+ o.onOpen&&o.onOpen(api);return api}
+function ask(title,msg,ok='Confirmar',cancel='Cancelar'){return new Promise(res=>{let done=false;modal({title,body:`<p>${msg}</p>`,onClose:()=>{if(!done)res(false)},actions:[{label:cancel,cls:'ghost',fn:()=>{done=true;res(false)}},{label:ok,cls:'',fn:()=>{done=true;res(true)}}]})})}
+function showText(title,intro,text){modal({title,wide:true,body:`<p>${intro}</p><textarea class="ta mono" id="shown" rows="10" readonly aria-label="${esc(title)}">${esc(text)}</textarea>`,actions:[{label:'Fechar',cls:'ghost'},{label:'Copiar texto',id:'cp',fn:async()=>{const ta=$('#shown');ta.select();try{await navigator.clipboard.writeText(text);toast('Texto copiado')}catch(e){toast('Selecione o texto e copie manualmente')}return false}}]})}
+async function saveFile(filename,data){try{const d=await claude.use('downloads');if(!d)return 'unavailable';await d.save({filename,data});return 'saved'}catch(e){const c=e&&e.code;return c==='declined'?'declined':c==='rejected_extension'?'rejected':'unavailable'}}
+
+/* ---------- Glossário ---------- */
+function g(html){return String(html).replace(/\[\[(.+?)\]\]/g,(m,t)=>`<button type="button" class="gl" data-g="${esc(t)}" aria-describedby="gpop">${esc(t)}</button>`)}
+{const pop=$('#gpop');let cur=null;
+ const show=b=>{const t=GLOSS[b.dataset.g];if(!t)return;pop.textContent=b.dataset.g+': '+t;pop.hidden=false;cur=b;const r=b.getBoundingClientRect(),pw=Math.min(300,innerWidth-24);pop.style.width=pw+'px';
+  let x=clamp(r.left,12,innerWidth-pw-12);pop.style.left=(x+scrollX)+'px';pop.style.top=(r.bottom+scrollY+6)+'px'};
+ const hide=()=>{pop.hidden=true;cur=null};
+ document.addEventListener('click',e=>{const b=e.target.closest('.gl');if(b){e.preventDefault();cur===b?hide():show(b)}else hide()});
+ document.addEventListener('focusin',e=>{const b=e.target.closest&&e.target.closest('.gl');if(b)show(b);else if(cur)hide()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pop.hidden)hide()});
+ document.addEventListener('mouseover',e=>{const b=e.target.closest&&e.target.closest('.gl');if(b)show(b)});
+ document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.gl')&&!document.activeElement.classList.contains('gl'))hide()})}
+
+/* ---------- Pontos, nível, sequência, conquistas ---------- */
+const lvl=()=>({n:Math.floor(S.xp/100)+1,name:LVN[Math.min(LVN.length-1,Math.floor(S.xp/100))],pct:S.xp%100});
+const curStreak=()=>{const t=iso(new Date()),y=iso(addD(new Date(),-1));return S.last===t||S.last===y?S.streak:0};
+function stamp(){const t=iso(new Date());if(S.last===t)return;const y=iso(addD(new Date(),-1));S.streak=S.last===y?S.streak+1:1;S.last=t;if(S.streak>=7)unlock('streak7')}
+function award(key,pts,label){if(S.awarded[key])return false;S.awarded[key]=1;S.xp+=pts;stamp();S.hist.unshift({t:Date.now(),l:label,p:pts});S.hist=S.hist.slice(0,80);save();updTop();toast('+'+pts+' pontos · '+label);return true}
+function unlock(id){if(S.ach[id])return;S.ach[id]=Date.now();const a=ACH.find(x=>x.id===id);S.hist.unshift({t:Date.now(),l:'Conquista: '+a.n,p:0});toast('Conquista desbloqueada: '+a.n+' '+a.e);save()}
+function updTop(){$('#sx').textContent='⭐ '+S.xp;$('#sk').textContent='🔥 '+curStreak();$('#sx').setAttribute('aria-label',S.xp+' pontos');$('#sk').setAttribute('aria-label',curStreak()+' dias seguidos')}
+const weekKey=t=>iso(wStart(new Date(t)));
+function weekStats(){const wk=weekKey(Date.now());const h=S.hist.filter(x=>weekKey(x.t)===wk);return{pts:h.reduce((a,x)=>a+x.p,0),acts:h.filter(x=>/^Atividade|^Bloco/.test(x.l)).length,pomos:h.filter(x=>/^Ciclo/.test(x.l)).length,tests:h.filter(x=>/^Mini-teste/.test(x.l)).length}}
+
+/* ---------- IA (sample) e limite de uso ---------- */
+let SAMPLE=null;
+(async()=>{try{if(window.claude&&claude.use)SAMPLE=await claude.use('sample')}catch(e){SAMPLE=null}})();
+function aiSlot(){const now=Date.now();S.ai=(S.ai||[]).filter(t=>now-t<3600e3);if(S.ai.length>=20)return false;S.ai.push(now);save();return true}
+const aiErr=c=>({not_granted:'O uso de IA não foi autorizado neste aparelho.',sampling_disabled:'A IA não está disponível para esta conta.',rate_limited:'Muitas perguntas em pouco tempo. Tente de novo daqui a pouco.',session_expired:'Sua sessão expirou. Entre de novo para continuar.'}[c]||'A IA não respondeu agora. Você pode tentar de novo.');
+
+/* ---------- Avaliações (útil / não útil) ---------- */
+function rateBtns(key){const v=S.ratings[key]||0;return `<span class="rate" role="group" aria-label="Esta recomendação foi útil?"><button type="button" class="rb" data-rate="${key}" data-v="1" aria-pressed="${v===1}" aria-label="Útil">👍</button><button type="button" class="rb" data-rate="${key}" data-v="-1" aria-pressed="${v===-1}" aria-label="Não útil">👎</button></span>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rate]');if(!b)return;const k=b.dataset.rate,v=+b.dataset.v;S.ratings[k]=S.ratings[k]===v?0:v;save();$$('[data-rate="'+k+'"]').forEach(x=>x.setAttribute('aria-pressed',String(S.ratings[k]===+x.dataset.v)));toast(S.ratings[k]?'Obrigada! Isso ajuda a melhorar as sugestões.':'Avaliação removida.')});
+
+/* ---------- Tema, céu, busca ---------- */
+const effTheme=()=>document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);
+function syncTheme(){$('#tt').textContent=effTheme()==='dark'?'☀️':'🌙';$('#tt').setAttribute('aria-label',effTheme()==='dark'?'Mudar para o tema claro':'Mudar para o tema escuro')}
+$('#tt').onclick=()=>{const n=effTheme()==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);S.theme=n;save();syncTheme()};
+syncTheme();
+{const sky=$('#sky'),cols=['#f2c98a','#cdbdf5','#ff9ad5','#b79bff'];for(let i=0;i<34;i++){const s=document.createElement('i');s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--s:${4+Math.random()*8}px;--c:${cols[i%4]};--d:${3+Math.random()*5}s;--l:-${Math.random()*6}s`;sky.appendChild(s)}}
+const nz=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function searchIndex(){const o=[];CAREERS.forEach(c=>o.push({t:c.n,s:'Carreira · '+AREAS[c.a].n,r:'carreiras',k:'careerOpen',v:c.id}));
+ CERTS.forEach(c=>o.push({t:c.n,s:'Certificação · '+c.p,r:'certificacoes',k:'certOpen',v:c.id}));
+ Object.values(SK).forEach(s=>o.push({t:s.n,s:'Competência · '+AREAS[s.a].n,r:'trilha'}));
+ EVENTS.forEach(e=>o.push({t:e.n,s:e.t,r:'oportunidades',k:'oppTab',v:'eventos'}));return o}
+$('#q').oninput=e=>{const v=nz(e.target.value.trim()),r=$('#res');if(!v){r.style.display='none';return}
+ const m=searchIndex().filter(x=>nz(x.t+' '+x.s).includes(v)).slice(0,7);
+ r.innerHTML=m.length?m.map((x,i)=>`<button type="button" data-i="${i}"><b>${esc(x.t)}</b><small>${esc(x.s)}</small></button>`).join(''):'<small class="none">Nada encontrado. Tente outra palavra.</small>';r.style.display='block';
+ $$('button',r).forEach(b=>b.onclick=()=>{const x=m[+b.dataset.i];r.style.display='none';$('#q').value='';if(x.k)UI[x.k]=x.v;go(x.r)})};
+document.addEventListener('click',e=>{if(!e.target.closest('.srch'))$('#res').style.display='none'});
+
+/* ---------- Rotas ---------- */
+const PAGES={inicio:['Início',()=>pgHome()],perfil:['Meu perfil',()=>pgProfile()],carreiras:['Carreiras',()=>pgCareers()],trilha:['Trilha',()=>pgTrail()],calendario:['Calendário',()=>pgCal()],certificacoes:['Certificações',()=>pgCerts()],oportunidades:['Oportunidades',()=>pgOpp()],foco:['Foco e bem-estar',()=>pgFocus()],progresso:['Progresso',()=>pgProg()],ajustes:['Ajustes',()=>pgSet()]};
+function go(r){if(location.hash!=='#'+r)location.hash=r;else render()}
+function paint(html,wide){app.innerHTML=g(html);app.classList.toggle('wide',!!wide);window.scrollTo(0,0);app.focus({preventScroll:true})}
+const AINOTE='<p class="ainote">✨ Conteúdo gerado com apoio de IA. São sugestões para ajudar você a decidir, não garantias.</p>';
+function errCard(e){console.error(e);paint(`<div class="c center"><h2>Algo deu errado nesta tela</h2><p class="mut">Seus dados continuam salvos. Tente abrir a tela de novo.</p><button class="btn" id="retry">Tentar de novo</button></div>`);const b=$('#retry');if(b)b.onclick=render}
+function render(){
+ document.body.classList.toggle('onb',!S.profOk);
+ try{
+  if(!S.profOk){document.title='Git Girls';renderOnb();return}
+  let r=location.hash.slice(1);if(!PAGES[r])r='inicio';
+  document.title=PAGES[r][0]+' · Git Girls';
+  $$('.nv').forEach(b=>{const on=b.dataset.p===r;b.classList.toggle('on',on);on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});
+  PAGES[r][1]();updTop()
+ }catch(e){errCard(e)}}
+window.addEventListener('hashchange',render);
+$$('.nv').forEach(b=>b.onclick=()=>go(b.dataset.p));
+$('#av').onclick=()=>go('perfil');
+
+/* ===== Questionário inicial, disponibilidade, currículo, geração do perfil ===== */
+const OB=['moment','study','exp','goals','interests','avail','skills','cv','summary'];
+const SKA=['cloud','linux','redes','git','python','sql','api','docker','cicd','etl','bi','iam','ml'];
+const OPT={
+ moment:['Estou começando do zero em tecnologia','Estou migrando de outra área para tecnologia','Já trabalho com tecnologia e quero ir para cloud','Já atuo com cloud e quero crescer'],
+ study:['Estudo por conta própria','Faço faculdade ou curso técnico na área','Faço bootcamp ou curso livre','Ainda não estudo, quero começar'],
+ exp:['Nenhuma experiência','Menos de 1 ano','De 1 a 3 anos','Mais de 3 anos'],
+ goals:['Conseguir o primeiro emprego em cloud','Mudar de área','Crescer ou ser promovida','Tirar uma certificação','Montar um portfólio','Aumentar minha renda','Trabalhar remotamente']};
+const lv=k=>S.mastered[k]?3:(+S.ans.skills[k]||0);
+const KW={cloud:/\b(aws|azure|gcp|google cloud|nuvem|cloud)\b/i,linux:/\b(linux|bash|shell script)\b/i,redes:/\b(redes|tcp\/ip|dns|vpn)\b/i,git:/\bgit(hub|lab)?\b/i,python:/\bpython\b/i,sql:/\b(sql|postgres(ql)?|mysql)\b/i,api:/\b(api|rest(ful)?)\b/i,docker:/\b(docker|cont[eê]iner(es)?)\b/i,cicd:/(ci\/cd|jenkins|github actions|gitlab ci)/i,etl:/\b(etl|elt|airflow|spark|pipelines? de dados)\b/i,bi:/(power ?bi|tableau|looker|dashboards?)/i,iam:/\b(iam)\b/i,ml:/(machine learning|aprendizado de m[aá]quina|scikit|tensorflow|pytorch)/i};
+function loadScript(u){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
+async function fileText(f){
+ const n=f.name.toLowerCase();
+ if(n.endsWith('.txt')||n.endsWith('.md')||f.type.startsWith('text/'))return await f.text();
+ if(n.endsWith('.docx')){if(!window.JSZip)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');const z=await JSZip.loadAsync(await f.arrayBuffer());const x=await z.file('word/document.xml').async('string');return x.replace(/<\/w:p>/g,'\n').replace(/<[^>]+>/g,' ')}
+ if(n.endsWith('.pdf')){if(!window.pdfjsLib){await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'}
+  const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t='';for(let p=1;p<=Math.min(d.numPages,6);p++){const pg=await d.getPage(p);t+=(await pg.getTextContent()).items.map(i=>i.str).join(' ')+'\n'}return t}
+ throw new Error('tipo')}
+const skillsFound=t=>Object.keys(KW).filter(k=>KW[k].test(t));
+
+/* ---------- Editor de disponibilidade semanal ---------- */
+function dayErr(d){const rs=S.ans.avail[d].slice().sort((a,b)=>a[0]-b[0]);
+ for(let i=0;i<rs.length;i++){if(rs[i][1]-rs[i][0]<15)return 'Cada horário precisa ter pelo menos 15 minutos.';if(i&&rs[i][0]<rs[i-1][1])return 'Os horários deste dia estão se sobrepondo.'}return ''}
+function availTotal(){return S.ans.avail.reduce((t,rs,d)=>t+(S.ans.off[d]?0:sumRanges(rs)),0)}
+function availEditor(host,onChange){
+ const A=S.ans;
+ function draw(focusSel){
+  host.innerHTML=`<div class="row" role="group" aria-label="Atalhos de disponibilidade"><button type="button" class="btn ghost sm" data-pre="noites">Noites de seg. a sex. (19h às 21h)</button><button type="button" class="btn ghost sm" data-pre="fds">Fins de semana (9h às 12h)</button><button type="button" class="btn ghost sm" data-pre="limpar">Limpar tudo</button></div>`+
+  A.avail.map((rs,d)=>`<div class="avd${A.off[d]?' off':''}"><h4><span>${DAYS[d]}</span><button type="button" class="tg" data-off="${d}" aria-pressed="${A.off[d]}">Sem estudo</button></h4>`+
+   (A.off[d]?'<p class="hint">Dia livre. Nenhum bloco será marcado.</p>':rs.map((r,i)=>`<div class="rg"><label>De <input type="time" step="900" value="${hm(r[0])}" data-d="${d}" data-i="${i}" data-k="0" aria-label="${DAYS[d]}, horário ${i+1}, início"></label><label>até <input type="time" step="900" value="${hm(r[1])}" data-d="${d}" data-i="${i}" data-k="1" aria-label="${DAYS[d]}, horário ${i+1}, fim"></label><button type="button" class="btn ghost sm" data-del="${d}:${i}" aria-label="Remover o horário ${i+1} de ${DAYS[d]}">Remover</button></div>`).join('')+`<button type="button" class="btn ghost sm" data-add="${d}">+ Adicionar horário</button>`)+`<p class="err" role="alert">${esc(dayErr(d))}</p></div>`).join('')+
+  `<div class="fld"><label for="hrs">Meta de horas de estudo por semana</label><input type="number" id="hrs" min="1" max="60" value="${A.hours}" inputmode="numeric"><span class="hint" id="avs"></span></div>`;
+  sum();if(focusSel){const f=$(focusSel,host);f&&f.focus()}}
+ function sum(){const t=availTotal(),el=$('#avs',host);if(!el)return;el.innerHTML=`Você tem <b>${fmtH(t)}</b> livres por semana.`+(A.hours*60>t&&t>0?' <span class="err">A meta é maior que o tempo livre. Aumente os horários ou reduza a meta.</span>':'')}
+ host.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.off!==undefined){const d=+b.dataset.off;A.off[d]=!A.off[d];save();draw(`[data-off="${d}"]`);onChange&&onChange()}
+  else if(b.dataset.add!==undefined){const d=+b.dataset.add,rs=A.avail[d],last=rs.length?Math.max(...rs.map(r=>r[1])):18*60;const s=Math.min(last+(rs.length?30:0),22*60);rs.push([s,Math.min(s+60,23*60+45)]);save();draw(`[data-d="${d}"][data-i="${rs.length-1}"][data-k="0"]`);onChange&&onChange()}
+  else if(b.dataset.del){const[d,i]=b.dataset.del.split(':').map(Number);A.avail[d].splice(i,1);save();draw(`[data-add="${d}"]`);onChange&&onChange()}
+  else if(b.dataset.pre){const p=b.dataset.pre;
+   if(p==='limpar'){A.avail=[[],[],[],[],[],[],[]];A.off=A.off.map(()=>false)}
+   if(p==='noites')for(let d=0;d<5;d++){A.off[d]=false;A.avail[d]=[[19*60,21*60]]}
+   if(p==='fds')for(let d=5;d<7;d++){A.off[d]=false;A.avail[d]=[[9*60,12*60]]}
+   save();draw();onChange&&onChange()}};
+ host.onchange=e=>{const t=e.target;
+  if(t.id==='hrs'){A.hours=clamp(Math.round(+t.value)||1,1,60);t.value=A.hours;save();sum();onChange&&onChange();return}
+  if(t.dataset.k!==undefined){const d=+t.dataset.d,i=+t.dataset.i,k=+t.dataset.k;if(!t.value){draw();return}A.avail[d][i][k]=hmToMin(t.value);
+   const ok=dayErr(d)==='';if(ok)A.avail[d].sort((a,b)=>a[0]-b[0]);save();draw(ok?null:`[data-d="${d}"][data-i="${i}"][data-k="${k}"]`);onChange&&onChange()}};
+ draw();return{redraw:draw}}
+
+/* ---------- Telas do questionário ---------- */
+function obBar(i){return `<div class="top2"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${OB.length}" aria-valuenow="${i+1}" aria-label="Progresso do questionário"><i style="width:${(i+1)/OB.length*100}%"></i></div><span class="mut" aria-hidden="true">${i+1}/${OB.length}</span></div>`}
+function setStep(s){S.step=s;save();render()}
+function renderOnb(){
+ const st=S.step;
+ if(st==='welcome'){
+  paint(`<div class="wel"><div class="hero" style="padding-right:32px"><h1>Git <em>Girls</em></h1><p>Uma plataforma para mulheres que querem crescer em carreiras de nuvem. Responda a algumas perguntas e receba um perfil, uma trilha de estudos e um calendário que cabe na sua rotina.</p><button type="button" class="btn gold" id="go">Começar</button></div>
+  <div class="c"><h2>Antes de começar</h2><p>Leva de 5 a 8 minutos. Você pode voltar e mudar qualquer resposta. Seus dados ficam só neste navegador, e você pode apagar tudo em Ajustes.</p><p class="hint">As sugestões usam um catálogo curado de carreiras e certificações. A IA, quando disponível, ajuda a explicar e ordenar, mas não é garantia de resultado.</p>
+  <button type="button" class="btn ghost" id="ex">Prefiro ver com dados de exemplo</button></div></div>`);
+  $('#go').onclick=()=>setStep('moment');
+  $('#ex').onclick=loadExample;return}
+ if(st==='gen'){paint(`<div class="c"><div class="loader" role="status"><div class="spin" aria-hidden="true"></div><span>Montando seu perfil…</span></div><div class="center"><button type="button" class="btn ghost sm" id="skipai">Pular a IA e usar só as regras</button></div></div>`);return}
+ const i=OB.indexOf(st);if(i<0){S.step='welcome';return renderOnb()}
+ const A=S.ans,back=i>0?`<button type="button" class="btn ghost" id="bk">Voltar</button>`:'';
+ const fromSum=UI.fromSum;
+ const nav=(label)=>`<div class="nav2">${fromSum?'':back}<button type="button" class="btn" id="nx">${fromSum?'Salvar e voltar ao resumo':label||'Continuar'}</button></div><p class="err" id="er" role="alert"></p>`;
+ const next=()=>{if(fromSum){UI.fromSum=false;setStep('summary')}else setStep(OB[i+1])};
+ const need=m=>{$('#er').textContent=m;say(m)};
+ let h=obBar(i);
+ const single=(k,q,hint)=>{h+=`<h1 class="q" id="qq">${q}</h1>${hint?`<p class="mut">${hint}</p>`:''}<div class="opts" role="radiogroup" aria-labelledby="qq">${OPT[k].map(o=>`<button type="button" class="opt" role="radio" aria-checked="${A[k]===o}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`+nav();paint(h);
+  $$('.opt').forEach(b=>b.onclick=()=>{A[k]=b.dataset.v;save();$$('.opt').forEach(x=>x.setAttribute('aria-checked',String(x===b)))});
+  $('#nx').onclick=()=>A[k]?next():need('Escolha uma opção para continuar.')};
+ if(st==='moment')single('moment','Em que momento você está?','Isso ajuda a ajustar o ponto de partida da trilha.');
+ else if(st==='study')single('study','Como você estuda hoje?');
+ else if(st==='exp')single('exp','Quanta experiência com tecnologia você tem?');
+ else if(st==='goals'||st==='interests'){
+  const isG=st==='goals',list=isG?OPT.goals:Object.keys(AREAS),sel=isG?A.goals:A.interests,none=isG?'noGoal':'noInt';
+  h+=`<h1 class="q" id="qq">${isG?'O que você quer alcançar?':'Quais áreas de cloud despertam sua curiosidade?'}</h1><p class="mut">Pode marcar mais de uma.</p><div class="opts" role="group" aria-labelledby="qq">`+
+   list.map(o=>`<button type="button" class="opt" aria-pressed="${sel.includes(o)}" data-v="${esc(o)}">${isG?esc(o):AREAS[o].e+' '+esc(AREAS[o].n)}</button>`).join('')+`<button type="button" class="opt" aria-pressed="${A[none]}" data-none="1">Ainda não sei</button></div>`+nav();paint(h);
+  const sync=()=>$$('.opt').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.none?A[none]:sel.includes(b.dataset.v))));
+  $$('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.none){A[none]=!A[none];if(A[none])sel.length=0}else{const k=sel.indexOf(b.dataset.v);k<0?sel.push(b.dataset.v):sel.splice(k,1);if(sel.length)A[none]=false}save();sync()});
+  $('#nx').onclick=()=>(sel.length||A[none])?next():need('Marque uma opção ou escolha "Ainda não sei".')}
+ else if(st==='avail'){
+  h+=`<h1 class="q">Quando você consegue estudar?</h1><p class="mut">Informe os horários livres de cada dia. Vamos montar seu calendário só dentro deles.</p><div id="avh"></div>`+nav();paint(h);
+  availEditor($('#avh'));
+  $('#nx').onclick=()=>{const bad=[0,1,2,3,4,5,6].find(d=>!S.ans.off[d]&&dayErr(d));
+   if(bad!==undefined)return need('Corrija os horários de '+DAYS[bad]+'.');
+   if(availTotal()<30)return need('Informe pelo menos 30 minutos livres em algum dia.');next()}}
+ else if(st==='skills'){
+  h+=`<h1 class="q">O que você já sabe?</h1><p class="mut">Seja sincera: isso só serve para montar uma trilha que faça sentido. Nada aqui é avaliado.</p><div class="skg">`+SKA.map(k=>`<div class="skr"><label for="s-${k}">${esc(SK[k].n)}</label><select id="s-${k}">${LEVELS.map((l,n)=>`<option value="${n}"${lv(k)===n?' selected':''}>${l}</option>`).join('')}</select></div>`).join('')+`</div>`+nav();paint(h);
+  SKA.forEach(k=>$('#s-'+k).onchange=e=>{A.skills[k]=+e.target.value;save()});$('#nx').onclick=next}
+ else if(st==='cv'){
+  h+=`<h1 class="q">Quer enviar seu currículo?</h1><p class="mut">É opcional. Lemos o arquivo aqui no seu navegador só para sugerir competências. O texto não é guardado nem enviado.</p>
+  <label class="tg" style="display:flex;align-items:center;gap:10px;border-radius:14px;margin:10px 0"><input type="checkbox" id="cvc" ${S.consent.cv?'checked':''}> Autorizo a leitura do meu currículo para sugerir competências.</label>
+  <div class="fld"><label for="cvf">Arquivo (PDF, DOCX ou TXT)</label><input type="file" id="cvf" accept=".pdf,.docx,.txt,.md" ${S.consent.cv?'':'disabled'}></div><div id="cvr" aria-live="polite"></div>`+nav('Continuar');paint(h);
+  const rep=()=>{$('#cvr').innerHTML=A.cv.length?`<div class="infobox">Encontramos menções a: <b>${A.cv.map(k=>esc(SK[k].n)).join(', ')}</b>. Elas serão usadas só como pista. Confirme os níveis no resumo.</div>`:''};rep();
+  $('#cvc').onchange=e=>{S.consent.cv=e.target.checked;$('#cvf').disabled=!e.target.checked;save()};
+  $('#cvf').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>5e6){$('#cvr').innerHTML='<p class="err">O arquivo passa de 5 MB. Escolha um menor ou pule esta etapa.</p>';return}
+   $('#cvr').innerHTML='<p>Lendo o arquivo…</p>';try{const t=await fileText(f);A.cv=skillsFound(t);A.cv.forEach(k=>{if(!A.skills[k])A.skills[k]=1});save();rep();if(!A.cv.length)$('#cvr').innerHTML='<p>Não encontramos competências conhecidas. Você pode informar manualmente.</p>'}catch(x){$('#cvr').innerHTML='<p class="err">Não consegui ler este arquivo. Tente outro formato ou pule esta etapa.</p>'}};
+  $('#nx').onclick=next}
+ else if(st==='summary'){
+  const row=(lb,v,s)=>`<div class="sumr"><div><b>${lb}</b>${v}</div><button type="button" class="btn ghost sm" data-ed="${s}" aria-label="Editar ${lb}">Editar</button></div>`;
+  const sk=SKA.filter(k=>lv(k)>=1).map(k=>SK[k].n+' ('+LEVELS[lv(k)].toLowerCase()+')');
+  h+=obBar(i)+`<h1 class="q">Confira suas respostas</h1><div class="c sumg">`+
+   row('Momento',esc(A.moment),'moment')+row('Estudo',esc(A.study),'study')+row('Experiência',esc(A.exp),'exp')+
+   row('Objetivos',esc(A.noGoal?'Ainda não sei':A.goals.join('; ')),'goals')+row('Áreas de interesse',esc(A.noInt?'Ainda não sei':A.interests.map(a=>AREAS[a].n).join(', ')),'interests')+
+   row('Disponibilidade',`${fmtH(availTotal())} livres por semana, meta de ${A.hours}h`,'avail')+row('Competências',esc(sk.length?sk.join('; '):'Começando do zero'),'skills')+`</div>
+   <div class="nav2"><button type="button" class="btn ghost" id="bk">Voltar</button><button type="button" class="btn" id="mk">Gerar meu perfil</button></div>`;paint(h);
+  $$('[data-ed]').forEach(b=>b.onclick=()=>{UI.fromSum=true;setStep(b.dataset.ed)});$('#mk').onclick=genProfile}
+ const bk=$('#bk');if(bk)bk.onclick=()=>{UI.fromSum=false;setStep(OB[i-1])}}
+
+/* ---------- Geração do perfil (regras + IA opcional) ---------- */
+const LEVN=['Iniciante','Em desenvolvimento','Intermediária','Avançada'];
+function ruleProfile(){
+ const A=S.ans,ks=Object.keys(SK),ans=SKA.map(lv),avg=ans.reduce((a,b)=>a+b,0)/ans.length;
+ const expN=OPT.exp.indexOf(A.exp),score=avg+(expN>1?0.4:0)+(expN>2?0.3:0);
+ const level=score<0.6?0:score<1.3?1:score<2.1?2:3;
+ const careers=CAREERS.map(c=>{
+  const fit=c.sk.reduce((t,k)=>t+lv(k)/3,0)/c.sk.length;
+  const int=A.noInt||!A.interests.length?0.5:(A.interests.includes(c.a)?1:0.15);
+  let goalB=0;if(A.goals.includes('Tirar uma certificação')&&c.certs.length)goalB+=.05;if(A.goals.includes('Montar um portfólio'))goalB+=.03;
+  const pct=Math.round(clamp(8+(0.45*fit+0.5*int+goalB)*88,8,96));
+  const have=c.sk.filter(k=>lv(k)>=2).map(k=>SK[k].n),miss=c.sk.filter(k=>lv(k)<=1).map(k=>SK[k].n);
+  const why=(A.interests.includes(c.a)?`Combina com seu interesse em ${AREAS[c.a].n.toLowerCase()}. `:'')+(have.length?`Você já tem base em ${have.slice(0,3).join(', ')}. `:'Você começaria pelos fundamentos. ')+(miss.length?`Falta desenvolver ${miss.slice(0,3).join(', ')}.`:'');
+  return{id:c.id,pct,why:why.trim()}}).sort((a,b)=>b.pct-a.pct);
+ const top=CAREERS.find(c=>c.id===careers[0].id);
+ return{level,careers,strengths:SKA.filter(k=>lv(k)>=2),gaps:top.sk.filter(k=>lv(k)<=1),text:`Seu nível atual: ${LEVN[level].toLowerCase()}. ${A.noInt?'Como você ainda não escolheu uma área, mostramos opções variadas.':'Priorizamos as áreas que você marcou.'} Escolha uma carreira como meta para liberar sua trilha e o calendário.`,ai:false,ts:Date.now()}}
+function applyMastery(){SKA.forEach(k=>{if((+S.ans.skills[k]||0)>=3)S.mastered[k]=true})}
+let genCtl=null;
+async function genProfile(){
+ setStep('gen');const base=ruleProfile();let prof=base;
+ const skip=$('#skipai');let skipped=false;genCtl=new AbortController();if(skip)skip.onclick=()=>{skipped=true;genCtl&&genCtl.abort()};
+ if(SAMPLE&&aiSlot()){
+  try{
+   const A=S.ans;const prompt=`Você orienta mulheres que querem carreira em cloud. Com base no perfil abaixo, escreva um parágrafo curto e acolhedor (máximo 60 palavras, sem prometer resultados) e uma justificativa de uma frase para cada carreira da lista.
+Use APENAS os ids do catálogo. Responda em JSON: {"text":"...","why":{"<id>":"..."}}.
+Momento: ${A.moment}. Estudo: ${A.study}. Experiência: ${A.exp}. Objetivos: ${A.noGoal?'indefinidos':A.goals.join('; ')}. Áreas de interesse: ${A.noInt?'indefinidas':A.interests.map(x=>AREAS[x].n).join(', ')}. Nível estimado: ${LEVN[base.level]}.
+Competências: ${SKA.map(k=>SK[k].n+'='+LEVELS[lv(k)]).join('; ')}.
+Carreiras sugeridas: ${base.careers.slice(0,5).map(c=>c.id+' ('+CAREERS.find(x=>x.id===c.id).n+')').join('; ')}.`;
+   const r=await Promise.race([SAMPLE.json(prompt,{signal:genCtl.signal,cache:false,modelTier:'quick'}),new Promise((_,no)=>setTimeout(()=>no({code:'timeout'}),15000))]);
+   if(r&&typeof r.text==='string'&&r.text.length<600){prof={...base,text:r.text.trim(),ai:true,careers:base.careers.map(c=>({...c,why:(r.why&&typeof r.why[c.id]==='string'&&r.why[c.id].length<300)?r.why[c.id].trim():c.why}))}}
+  }catch(e){if(e&&e.code==='not_granted')toast(aiErr(e.code))}}
+ if(SAMPLE&&!prof.ai&&!skipped)toast('A análise personalizada está indisponível agora. Usamos regras simples.');
+ genCtl=null;S.profile=prof;S.profOk=true;S.obDone=true;S.step='done';applyMastery();award('profile',PTS.profile,'Perfil criado');award('ob',PTS.ob,'Questionário concluído');save();
+ if(location.hash!=='#perfil')location.hash='perfil';else render()}
+function loadExample(){
+ Object.assign(S.ans,{moment:OPT.moment[1],study:OPT.study[0],exp:OPT.exp[1],goals:[OPT.goals[0],OPT.goals[3]],interests:['dados'],noGoal:false,noInt:false,hours:5,
+  avail:[[[19*60,21*60]],[[19*60,21*60]],[[19*60,20*60+30]],[],[[19*60,21*60]],[[9*60,12*60]],[]],off:[false,false,false,false,false,false,true],skills:{cloud:1,python:2,sql:2,git:1}});
+ save();genProfile()}
+
+/* ---------- Meu perfil ---------- */
+function recomputeProfile(){const keep=S.profile;const p=ruleProfile();S.profile={...p,text:keep?keep.text:p.text,ai:keep?keep.ai:false,careers:p.careers.map(c=>({...c,why:c.why}))};save()}
+function pgProfile(){
+ const P=S.profile;if(!P){S.profOk=false;return render()}
+ const top=P.careers.slice(0,4);
+ paint(`<h1>Meu perfil</h1>
+ <div class="c"><div class="row"><h2 class="sp">Ponto de partida: ${esc(LEVN[P.level])}</h2>${P.ai?'<span class="chip gold">✨ com apoio de IA</span>':'<span class="chip">Gerado por regras</span>'}</div><p>${esc(P.text)}</p>
+  <div class="row"><label for="lvsel" class="lbl">Ajustar nível:</label><select id="lvsel" style="width:auto">${LEVN.map((l,i)=>`<option value="${i}"${P.level===i?' selected':''}>${l}</option>`).join('')}</select></div></div>
+ <h2 class="sec">Carreiras com mais afinidade</h2>
+ ${top.map(c=>{const k=CAREERS.find(x=>x.id===c.id);return `<div class="c"><div class="row"><h3 class="sp">${k.e} ${esc(k.n)}</h3><span class="pct">${c.pct}%</span></div><div class="fit" aria-hidden="true"><i style="width:${c.pct}%"></i></div><p class="mut" style="margin-top:8px">${esc(c.why)}</p><p class="hint">Afinidade estimada a partir das suas respostas. Não é uma previsão.</p><div class="row"><button type="button" class="btn sm" data-goal="${k.id}">${S.goal===k.id?'✓ Minha meta':'Escolher como meta'}</button><button type="button" class="btn ghost sm" data-see="${k.id}">Ver detalhes</button>${rateBtns('pf:'+k.id)}</div></div>`}).join('')}
+ <div class="c"><h3>Pontos fortes</h3><div class="chips">${P.strengths.length?P.strengths.map(k=>`<span class="chip ok">${esc(SK[k].n)}</span>`).join(''):'<span class="mut">Ainda estamos no começo, e tudo bem.</span>'}</div>
+  <h3 style="margin-top:14px">Para desenvolver</h3><div class="chips">${P.gaps.length?P.gaps.map(k=>`<span class="chip warn">${esc(SK[k].n)}</span>`).join(''):'<span class="mut">Nada urgente para a carreira no topo da lista.</span>'}</div></div>
+ <details class="d"><summary>Ajustar minhas competências</summary><div class="skg" style="margin-top:10px">${Object.keys(SK).map(k=>`<div class="skr"><label for="p-${k}">${esc(SK[k].n)}</label><select id="p-${k}">${LEVELS.map((l,n)=>`<option value="${n}"${lv(k)===n?' selected':''}>${l}</option>`).join('')}</select></div>`).join('')}</div><p class="hint">Ao mudar, as afinidades são recalculadas.</p></details>
+ <div class="row" style="margin-top:14px"><button type="button" class="btn ghost" id="redo">Refazer o questionário</button></div>${AINOTE}`);
+ $('#lvsel').onchange=e=>{S.profile.level=+e.target.value;save();toast('Nível ajustado')};
+ $$('[data-goal]').forEach(b=>b.onclick=()=>{setGoal(b.dataset.goal)});
+ $$('[data-see]').forEach(b=>b.onclick=()=>{UI.careerOpen=b.dataset.see;go('carreiras')});
+ Object.keys(SK).forEach(k=>$('#p-'+k).onchange=e=>{const v=+e.target.value;S.ans.skills[k]=v;if(v>=3)S.mastered[k]=true;else delete S.mastered[k];recomputeProfile();render()});
+ $('#redo').onclick=async()=>{if(await ask('Refazer o questionário?','Suas respostas atuais ficam preenchidas e você pode alterar o que quiser. Seu progresso na trilha não é apagado.','Refazer')){S.profOk=false;S.step='moment';UI.fromSum=false;save();render()}}}
+function setGoal(id){if(S.goal===id)return;S.goal=id;save();const c=CAREERS.find(x=>x.id===id);toast('Meta definida: '+c.n);say('Meta definida: '+c.n);if(effPage()==='perfil')render();else if(effPage()==='carreiras')render()}
+const effPage=()=>{const r=location.hash.slice(1);return PAGES[r]?r:'inicio'};
+
+/* ===== Carreiras, trilha, certificações, oportunidades ===== */
+const goalC=()=>CAREERS.find(c=>c.id===S.goal)||null;
+const careerFit=id=>{const p=S.profile&&S.profile.careers.find(c=>c.id===id);return p?p.pct:null};
+const A_=(u,t)=>`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)}<span class="sr"> (abre em nova aba)</span></a>`;
+const typeChip=t=>`<span class="chip${t==='gratuito'?' ok':''}">${esc(t)}</span>`;
+const skDone=k=>!!S.mastered[k]||SK[k].res.every((r,i)=>S.done[k+':'+i]);
+function stageItems(c,i){
+ if(i<3)return c.sk.filter(k=>SK[k].st===i).map(k=>({k:'skill',id:k}));
+ if(i===3)return c.certs.map(id=>({k:'cert',id}));
+ if(i===4)return c.proj.map((p,n)=>({k:'proj',id:n}));
+ return c.ev.map(id=>({k:'ev',id}))}
+function itemDone(c,it){return it.k==='skill'?skDone(it.id):it.k==='cert'?!!S.done['cert:'+it.id]:it.k==='proj'?!!S.done['proj:'+c.id+':'+it.id]:!!S.done['ev:'+it.id]}
+const stageDone=(c,i)=>stageItems(c,i).every(it=>itemDone(c,it));
+function stageFrac(c,i){const it=stageItems(c,i);return it.length?it.filter(x=>itemDone(c,x)).length/it.length:1}
+function overall(c){let t=0,d=0;for(let i=0;i<6;i++){const it=stageItems(c,i);t+=it.length;d+=it.filter(x=>itemDone(c,x)).length}return t?Math.round(d/t*100):0}
+function curStage(c){for(let i=0;i<6;i++)if(!stageDone(c,i))return i;return 5}
+function pendingActs(){const c=goalC();if(!c)return[];const o=[];
+ for(let i=0;i<5;i++)stageItems(c,i).forEach(it=>{
+  if(it.k==='skill'&&!skDone(it.id))SK[it.id].res.forEach((r,n)=>{if(!S.done[it.id+':'+n])o.push({id:it.id+':'+n,t:r.t,h:r.h,stage:i})});
+  if(it.k==='cert'&&!S.done['cert:'+it.id]){const ce=CERTS.find(x=>x.id===it.id);o.push({id:'cert:'+it.id,t:'Preparar para '+ce.n,h:20,stage:3})}
+  if(it.k==='proj'&&!S.done['proj:'+c.id+':'+it.id]){const p=c.proj[it.id];o.push({id:'proj:'+c.id+':'+it.id,t:p[0],h:p[2],stage:4})}});
+ return o}
+function actTitle(id){if(id.startsWith('cert:')){const ce=CERTS.find(x=>x.id===id.slice(5));return ce?'Preparar para '+ce.n:id}
+ if(id.startsWith('proj:')){const[,cid,n]=id.split(':'),c=CAREERS.find(x=>x.id===cid);return c&&c.proj[n]?c.proj[n][0]:id}
+ const[k,n]=id.split(':');return SK[k]&&SK[k].res[n]?SK[k].res[n].t:id}
+function checkStages(){const c=goalC();if(!c)return;for(let i=0;i<6;i++){if(stageItems(c,i).length&&stageDone(c,i)&&award('stage:'+c.id+':'+i,PTS.stage,'Etapa concluída: '+ST[i]))unlock('first-stage')}}
+function markAct(id,on,title){if(on){S.done[id]=1;if(award('act:'+id,PTS.act,'Atividade: '+(title||actTitle(id))))unlock('first-act')}else delete S.done[id];save();checkStages()}
+
+/* ---------- Carreiras ---------- */
+function pgCareers(){
+ if(UI.careerOpen){const c=CAREERS.find(x=>x.id===UI.careerOpen);if(c)return careerDetail(c);UI.careerOpen=null}
+ const f=UI.flt.area;
+ const list=CAREERS.filter(c=>!f||c.a===f).slice().sort((a,b)=>(careerFit(b.id)||0)-(careerFit(a.id)||0));
+ paint(`<h1>Carreiras em cloud</h1><p class="mut">Conheça o dia a dia de cada carreira e escolha uma como meta. Você pode trocar quando quiser.</p>
+ <div class="chips" role="group" aria-label="Filtrar por área" style="margin-bottom:14px"><button type="button" class="tg" aria-pressed="${!f}" data-a="">Todas</button>${Object.entries(AREAS).map(([k,a])=>`<button type="button" class="tg" aria-pressed="${f===k}" data-a="${k}">${a.e} ${a.n}</button>`).join('')}</div>
+ <div class="cg">${list.map(c=>{const p=careerFit(c.id);return `<div class="cc${S.goal===c.id?' sel':''}"><div class="em" aria-hidden="true">${c.e}</div><h3>${esc(c.n)}</h3><p class="mut" style="margin:0">${esc(c.sum)}</p>${p!=null?`<div class="row"><span class="pct">${p}%</span><span class="hint">afinidade estimada</span></div><div class="fit" aria-hidden="true"><i style="width:${p}%"></i></div>`:''}<div class="chips"><span class="chip">${AREAS[c.a].e} ${AREAS[c.a].n}</span><span class="chip">${esc(c.sen)}</span></div><div class="row"><button type="button" class="btn sm" data-open="${c.id}">Ver detalhes</button>${S.goal===c.id?'<span class="chip gold">Minha meta</span>':''}</div></div>`}).join('')}</div>${AINOTE}`,true);
+ $$('[data-a]').forEach(b=>b.onclick=()=>{UI.flt.area=b.dataset.a;render()});
+ $$('[data-open]').forEach(b=>b.onclick=()=>{UI.careerOpen=b.dataset.open;render()})}
+function careerDetail(c){
+ const p=careerFit(c.id),pr=S.profile&&S.profile.careers.find(x=>x.id===c.id);
+ paint(`<button type="button" class="back" id="bk">← Todas as carreiras</button>
+ <div class="realm"><div class="em" aria-hidden="true">${c.e}</div><div><h1 style="margin:0;font-size:1.6rem;color:var(--gld2)">${esc(c.n)}</h1><p>${esc(c.sum)}</p></div></div>
+ ${pr?`<div class="c"><div class="row"><h3 class="sp">Por que combina com você</h3><span class="pct">${p}%</span></div><p>${esc(pr.why)}</p><p class="hint">Afinidade estimada, não é uma previsão de resultado.</p>${rateBtns('cr:'+c.id)}</div>`:''}
+ <div class="c"><h3>Um dia nessa carreira</h3><p>${esc(c.day)}</p><div class="chips"><span class="chip">Nível: ${esc(c.sen)}</span></div></div>
+ <div class="c"><h3>Competências</h3><div class="chips">${c.sk.map(k=>`<span class="chip${lv(k)>=2?' ok':''}">${esc(SK[k].n)} · ${LEVELS[lv(k)].toLowerCase()}</span>`).join('')}</div><h3 style="margin-top:14px">Ferramentas comuns</h3><div class="chips">${c.tools.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div></div>
+ <div class="c"><h3>Ordem sugerida de estudo</h3><ol style="margin:0;padding-left:22px">${c.grade.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
+ <div class="c"><h3>Certificações relacionadas</h3><div class="chips">${c.certs.map(id=>{const ce=CERTS.find(x=>x.id===id);return `<button type="button" class="tg" data-cert="${id}">🏅 ${esc(ce.n)}</button>`}).join('')}</div>
+ <h3 style="margin-top:14px">Comunidades e eventos</h3><div class="chips">${c.ev.map(id=>{const e=EVENTS.find(x=>x.id===id);return `<button type="button" class="tg" data-ev="${id}">${esc(e.n)}</button>`}).join('')}</div></div>
+ <div class="c"><h3>Ideias de projetos para o portfólio</h3>${c.proj.map(x=>`<details class="d"><summary>${esc(x[0])}</summary><p style="margin:8px 0 0">${esc(x[1])}</p><p class="hint">Estimativa: cerca de ${x[2]} horas.</p></details>`).join('')}</div>
+ <div class="row"><button type="button" class="btn" id="mk">${S.goal===c.id?'✓ Esta é minha meta':'Escolher como meta'}</button><button type="button" class="btn ghost" id="tr">Ver minha trilha</button></div>${AINOTE}`);
+ $('#bk').onclick=()=>{UI.careerOpen=null;render()};
+ $('#mk').onclick=()=>{if(S.goal!==c.id){setGoal(c.id)}};
+ $('#tr').onclick=()=>{if(!S.goal)return toast('Escolha uma carreira como meta primeiro.');go('trilha')};
+ $$('[data-cert]').forEach(b=>b.onclick=()=>{UI.certOpen=b.dataset.cert;go('certificacoes')});
+ $$('[data-ev]').forEach(b=>b.onclick=()=>{UI.oppTab='eventos';go('oportunidades')})}
+
+/* ---------- Trilha ---------- */
+function pgTrail(){
+ const c=goalC();
+ if(!c)return paint(`<h1>Minha trilha</h1><div class="empty"><p><b>Escolha uma carreira como meta para montar sua trilha.</b></p><p class="mut">A trilha mostra, etapa por etapa, o que estudar e praticar.</p><button type="button" class="btn" id="gc">Ver carreiras</button></div>`),$('#gc').onclick=()=>go('carreiras');
+ const cur=curStage(c);if(UI.stageOpen==null)UI.stageOpen=cur;
+ const pc=overall(c),hrs=pendingActs().reduce((t,a)=>t+(a.h||0),0);
+ paint(`<h1>Minha trilha</h1>
+ <div class="c"><div class="row"><div class="sp"><h2 style="margin:0">${c.e} ${esc(c.n)}</h2><p class="mut" style="margin:4px 0 0">${pc}% concluído · cerca de ${hrs} horas de estudo restantes (estimativa)</p></div><button type="button" class="btn ghost sm" id="chg">Trocar meta</button></div><div class="pg" role="progressbar" aria-valuenow="${pc}" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso geral"><i style="width:${pc}%"></i></div></div>
+ <div class="path">${ST.map((nm,i)=>{const it=stageItems(c,i),done=stageDone(c,i),fr=Math.round(stageFrac(c,i)*100),open=UI.stageOpen===i;
+  return `<section class="sc"><span class="dot${done&&it.length?' ok':''}" aria-hidden="true">${done&&it.length?'✓':i+1}</span><button type="button" class="hd" data-st="${i}" aria-expanded="${open}" aria-controls="st${i}"><span class="tt"><h3>${i+1}. ${nm}</h3><span class="hint">${!it.length?'Nada novo nesta etapa para esta carreira':done?'Concluída':i===cur?'Etapa atual':'Em seguida'}${it.length?' · '+fr+'%':''}</span></span><span aria-hidden="true">${open?'▾':'▸'}</span></button>${open?`<div id="st${i}">${stageBody(c,i)}</div>`:''}</section>`}).join('')}</div>${AINOTE}`,true);
+ $('#chg').onclick=()=>go('carreiras');
+ $$('[data-st]').forEach(b=>b.onclick=()=>{UI.stageOpen=UI.stageOpen===+b.dataset.st?-1:+b.dataset.st;render()});
+ $$('[data-act]').forEach(b=>b.onchange=()=>{markAct(b.dataset.act,b.checked);render()});
+ $$('[data-test]').forEach(b=>b.onclick=()=>miniTest(b.dataset.test));
+ $$('[data-cdone]').forEach(b=>b.onchange=()=>setCert(b.dataset.cdone,b.checked));
+ $$('[data-cgo]').forEach(b=>b.onclick=()=>{UI.certOpen=b.dataset.cgo;go('certificacoes')});
+ $$('[data-evd]').forEach(b=>b.onchange=()=>{markAct('ev:'+b.dataset.evd,b.checked,'Explorou '+EVENTS.find(e=>e.id===b.dataset.evd).n);render()})}
+function stageBody(c,i){
+ const it=stageItems(c,i);
+ if(!it.length)return `<p class="mut">Nenhuma competência desta carreira cai nesta etapa. Siga para a próxima.</p>`;
+ if(i<3)return `<div class="actl">${it.map(x=>{const s=SK[x.id],m=!!S.mastered[x.id],d=skDone(x.id);
+  return `<div class="act${d?' done':''}"><div class="row"><b class="sp">${esc(s.n)}</b>${m?'<span class="chip ok">Dominada</span>':d?'<span class="chip ok">Concluída</span>':`<span class="chip">${LEVELS[lv(x.id)]}</span>`}</div>
+  <ul class="res">${s.res.map((r,n)=>`<li><label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" data-act="${x.id}:${n}" ${S.done[x.id+':'+n]?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> <span>${A_(r.url,r.t)}</span></label> ${typeChip(r.type)}<span class="hint">${r.kind} · ~${r.h}h</span></li>`).join('')}</ul>
+  ${m?'':`<button type="button" class="btn ghost sm" data-test="${x.id}">Já sei? Fazer mini-teste</button>`}</div>`}).join('')}</div><p class="hint">Os links levam a páginas oficiais e plataformas conhecidas. Nem todos os cursos são gratuitos, veja o rótulo ao lado de cada um.</p>`;
+ if(i===3)return `<div class="actl">${it.map(x=>{const ce=CERTS.find(y=>y.id===x.id),d=!!S.done['cert:'+x.id];return `<div class="act${d?' done':''}"><div class="row"><b class="sp">${esc(ce.n)}</b><span class="chip">${ce.lv}</span></div><p class="hint" style="margin:4px 0">Pré-requisitos: ${esc(ce.pre)}</p><div class="row"><button type="button" class="btn ghost sm" data-cgo="${ce.id}">Ver detalhes e simulados</button><label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" data-cdone="${ce.id}" ${d?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Já concluí</label></div></div>`}).join('')}</div>`;
+ if(i===4)return `<div class="actl">${it.map(x=>{const p=c.proj[x.id],id='proj:'+c.id+':'+x.id,d=!!S.done[id];return `<div class="act${d?' done':''}"><label style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" data-act="${id}" ${d?'checked':''} style="width:22px;height:22px;margin-top:3px;accent-color:#7a35e6"><span><b>${esc(p[0])}</b><br>${esc(p[1])}<br><span class="hint">Estimativa: ~${p[2]}h</span></span></label></div>`}).join('')}</div>`;
+ return `<p>Participar de comunidades e hackathons ajuda a praticar e a conhecer pessoas da área.</p><div class="actl">${it.map(x=>{const e=EVENTS.find(y=>y.id===x.id),d=!!S.done['ev:'+x.id];return `<div class="act${d?' done':''}"><label style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" data-evd="${e.id}" ${d?'checked':''} style="width:22px;height:22px;margin-top:3px;accent-color:#7a35e6"><span><b>${esc(e.n)}</b> <span class="chip">${esc(e.t)}</span><br>${esc(e.d)}<br>${A_(e.url,'Abrir página oficial')}</span></label></div>`}).join('')}</div><p><button type="button" class="btn ghost sm" onclick="UI.oppTab='vagas';go('oportunidades')">Ver oportunidades de trabalho</button></p>`}
+function miniTest(k){
+ const s=SK[k],qs=QZ[k].map(q=>{const opts=shuffle(q.slice(1).map((t,i)=>({t,ok:i===0})));return{q:q[0],opts}});
+ const body=`<p class="mut">4 perguntas. Acertando 3 ou mais, a competência fica como dominada.</p><div id="qz">${qs.map((x,n)=>`<fieldset style="border:0;padding:0;margin:0 0 12px"><legend style="font-weight:700;margin-bottom:4px">${n+1}. ${esc(x.q)}</legend>${x.opts.map((o,j)=>`<label style="display:flex;gap:8px;align-items:center;padding:8px 10px;border:1.5px solid var(--line);border-radius:12px;margin:6px 0;min-height:44px;cursor:pointer"><input type="radio" name="q${n}" value="${j}" style="accent-color:#7a35e6"> ${esc(o.t)}</label>`).join('')}</fieldset>`).join('')}</div><p class="err" id="qe" role="alert"></p>`;
+ modal({title:'Mini-teste: '+s.n,body,wide:true,actions:[{label:'Cancelar',cls:'ghost'},{label:'Corrigir',cls:'',keep:true,fn:api=>{
+  const sel=qs.map((x,n)=>{const r=$('input[name=q'+n+']:checked',api.el);return r?+r.value:-1});
+  if(sel.includes(-1)){$('#qe').textContent='Responda todas as perguntas antes de corrigir.';return false}
+  const hits=qs.map((x,n)=>x.opts[sel[n]].ok),score=hits.filter(Boolean).length,pass=score>=3;
+  api.close();
+  const det=qs.map((x,n)=>`<li><b>${esc(x.q)}</b><br>${hits[n]?'<span class="okm">Certo.</span>':`<span class="err">Resposta certa: ${esc(x.opts.find(o=>o.ok).t)}</span>`}</li>`).join('');
+  if(pass){S.mastered[k]=true;save();if(award('test:'+k,PTS.test,'Mini-teste: '+s.n))unlock('first-test');unlock('first-test');checkStages()}
+  modal({title:pass?'Muito bem!':'Quase lá',body:`<p><b>Você acertou ${score} de 4.</b> ${pass?'Competência marcada como dominada.':'Revise os materiais e tente de novo quando quiser. Não perde pontos.'}</p><ul style="padding-left:20px">${det}</ul>`,actions:[{label:'Fechar',cls:''}],onClose:render});return false}}]})}
+
+/* ---------- Certificações ---------- */
+function setCert(id,on){const ce=CERTS.find(x=>x.id===id);if(on){S.done['cert:'+id]=1;if(award('cert:'+id,PTS.cert,'Certificação concluída: '+ce.n))unlock('cert')}else delete S.done['cert:'+id];save();checkStages();render()}
+function pgCerts(){
+ if(UI.certOpen){const c=CERTS.find(x=>x.id===UI.certOpen);if(c)return certDetail(c);UI.certOpen=null}
+ const g_=goalC(),f=UI.flt.cert||'';
+ const list=CERTS.filter(c=>!f||c.a.includes(f)).sort((a,b)=>(g_&&g_.certs.includes(b.id)?1:0)-(g_&&g_.certs.includes(a.id)?1:0));
+ paint(`<h1>Certificações</h1><p class="mut">Certificações podem ajudar, mas não são obrigatórias. Valores, prazos e conteúdo mudam: confirme sempre no site oficial.</p>
+ <div class="chips" role="group" aria-label="Filtrar por área" style="margin-bottom:14px"><button type="button" class="tg" aria-pressed="${!f}" data-a="">Todas</button>${Object.entries(AREAS).map(([k,a])=>`<button type="button" class="tg" aria-pressed="${f===k}" data-a="${k}">${a.e} ${a.n}</button>`).join('')}</div>
+ <div class="cg">${list.map(c=>`<div class="cc"><div class="row"><span class="chip">${esc(c.p)}</span><span class="chip">${esc(c.lv)}</span>${S.done['cert:'+c.id]?'<span class="chip ok">Concluída</span>':g_&&g_.certs.includes(c.id)?'<span class="chip gold">Na sua trilha</span>':''}</div><h3>${esc(c.n)}</h3><p class="hint" style="margin:0">Pré-requisitos: ${esc(c.pre)}</p><p class="hint" style="margin:0">Prova: ${esc(c.dur)} · ${esc(c.cost)} (confirme no site)</p><button type="button" class="btn sm" data-open="${c.id}">Ver detalhes</button></div>`).join('')}</div>${AINOTE}`,true);
+ $$('[data-a]').forEach(b=>b.onclick=()=>{UI.flt.cert=b.dataset.a;render()});
+ $$('[data-open]').forEach(b=>b.onclick=()=>{UI.certOpen=b.dataset.open;render()})}
+function readiness(id){const s=S.sims.filter(x=>x.cert===id).sort((a,b)=>a.date<b.date?-1:1).slice(-3);return s.length?Math.round(s.reduce((t,x)=>t+x.score,0)/s.length):null}
+function certDetail(c){
+ const dr=c.dom.map((d,i)=>({n:d[0],w:d[1],r:+S.prog['dom:'+c.id+':'+i]||0,i}));
+ const prio=dr.slice().sort((a,b)=>b.w*(3-b.r)-a.w*(3-a.r)).filter(d=>d.r<3).slice(0,3);
+ const rd=readiness(c.id),sims=S.sims.filter(x=>x.cert===c.id).sort((a,b)=>a.date<b.date?1:-1);
+ paint(`<button type="button" class="back" id="bk">← Todas as certificações</button>
+ <div class="c"><div class="row"><span class="chip">${esc(c.p)}</span><span class="chip">${esc(c.lv)}</span></div><h1 style="margin-top:8px">${esc(c.n)}</h1>
+ <p><b>Pré-requisitos:</b> ${esc(c.pre)}</p><p><b>Prova:</b> ${esc(c.dur)} · <b>Valor de referência:</b> ${esc(c.cost)}</p><p class="hint">Valores e regras mudam. Confirme no site oficial antes de agendar.</p>
+ <div class="row">${A_(c.url,'Página oficial da certificação')} ${A_(c.lrn[1],'Estudar: '+c.lrn[0])}</div>
+ <label style="display:flex;gap:8px;align-items:center;min-height:44px;margin-top:8px"><input type="checkbox" id="cdn" ${S.done['cert:'+c.id]?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Já concluí esta certificação</label></div>
+ <div class="c"><h3>Domínios da prova</h3><p class="hint">Os pesos abaixo são aproximados e mudam entre versões do exame. Confirme no guia oficial.</p><div class="dom">${dr.map(d=>`<div class="dr"><div><b>${esc(d.n)}</b> <span class="hint">· peso ~${d.w}%</span></div><b>${d.w}%</b><div class="dbar" aria-hidden="true"><i style="width:${d.w}%"></i></div><div style="grid-column:1/-1"><label class="hint" for="dm${d.i}">Como você está neste tema?</label><select id="dm${d.i}" data-dm="${d.i}">${['Ainda não vi','Conheço o básico','Me sinto segura','Domino'].map((l,n)=>`<option value="${n}"${d.r===n?' selected':''}>${l}</option>`).join('')}</select></div></div>`).join('')}</div>
+ <div class="infobox"><b>O que priorizar:</b> ${prio.length?prio.map(p=>esc(p.n)).join('; ')+'.':'Você marcou todos os temas como dominados. Faça simulados para confirmar.'}</div></div>
+ <div class="c"><h3>Simulados</h3><p class="hint">Faça simulados em plataformas de sua confiança e registre aqui o resultado para acompanhar sua evolução. Não geramos questões da prova oficial.</p>
+ ${rd!=null?`<p><b>Média dos últimos simulados: ${rd}%.</b> ${rd>=75?'Resultado consistente. Veja os requisitos oficiais para agendar.':rd>=60?'Está no caminho. Revise os temas com menos segurança.':'Continue estudando os fundamentos e refaça depois.'}</p><p class="hint">A nota de aprovação oficial varia por exame. Confirme no site.</p>`:'<p class="mut">Nenhum simulado registrado ainda.</p>'}
+ <div class="row" style="align-items:flex-end"><div class="fld" style="margin:0"><label for="sd">Data</label><input type="date" id="sd" value="${iso(new Date())}" style="width:auto"></div><div class="fld" style="margin:0"><label for="ss">Resultado (%)</label><input type="number" id="ss" min="0" max="100" inputmode="numeric" style="width:110px"></div><button type="button" class="btn sm" id="sa" style="margin:0">Registrar</button></div><p class="err" id="se" role="alert"></p>
+ ${sims.length?`<table class="tb"><caption class="sr">Simulados registrados</caption><thead><tr><th>Data</th><th>Resultado</th><th></th></tr></thead><tbody>${sims.map(x=>`<tr><td>${esc(x.date.split('-').reverse().join('/'))}</td><td>${x.score}%</td><td><button type="button" class="btn ghost sm" data-rm="${x.id}" aria-label="Remover simulado de ${esc(x.date)}">Remover</button></td></tr>`).join('')}</tbody></table>`:''}</div>${AINOTE}`);
+ $('#bk').onclick=()=>{UI.certOpen=null;render()};
+ $('#cdn').onchange=e=>setCert(c.id,e.target.checked);
+ $$('[data-dm]').forEach(s=>s.onchange=()=>{S.prog['dom:'+c.id+':'+s.dataset.dm]=+s.value;save();render()});
+ $('#sa').onclick=()=>{const d=$('#sd').value,v=$('#ss').value;if(!d)return $('#se').textContent='Informe a data.';if(v===''||isNaN(+v)||+v<0||+v>100)return $('#se').textContent='Informe um resultado entre 0 e 100.';
+  S.sims.push({id:uid(),cert:c.id,date:d,score:Math.round(+v)});save();if(award('sim:'+S.sims.length,PTS.sim,'Simulado registrado'))unlock('sim');render()};
+ $$('[data-rm]').forEach(b=>b.onclick=()=>{S.sims=S.sims.filter(x=>x.id!==b.dataset.rm);save();render()})}
+
+/* ---------- Oportunidades ---------- */
+function pgOpp(){
+ const t=UI.oppTab,c=goalC(),kw=c?c.n:'cloud';
+ const tabs=`<div class="seg" role="group" aria-label="Tipo de oportunidade"><button type="button" aria-pressed="${t==='vagas'}" data-t="vagas">Vagas</button><button type="button" aria-pressed="${t==='eventos'}" data-t="eventos">Eventos e comunidades</button></div>`;
+ let body='';
+ if(t==='vagas'){
+  const F=UI.flt,cp=j=>j.sk.filter(k=>lv(k)>=2).length/j.sk.length,jobs=JOBS.filter(j=>(!F.mod||j.mod===F.mod)&&(!F.sen||j.sen===F.sen)&&(!F.loc||nz(j.loc).includes(nz(F.loc)))).sort((a,b)=>cp(b)-cp(a));
+  body=`<div class="warnbox"><b>Atenção:</b> as vagas abaixo são <b>modelos ilustrativos</b> para mostrar como calculamos a compatibilidade com as suas competências. Não são vagas reais. Para vagas de verdade, use as buscas oficiais:</div>
+  <div class="chips" style="margin-bottom:12px">${JOB_SOURCES.map(s=>`<span class="chip">${A_(s[1](kw),s[0]+': '+kw)}</span>`).join('')}</div>
+  <div class="row" style="margin-bottom:12px"><div class="fld" style="margin:0"><label for="fm">Modalidade</label><select id="fm"><option value="">Todas</option>${['remoto','híbrido','presencial'].map(x=>`<option${F.mod===x?' selected':''}>${x}</option>`).join('')}</select></div><div class="fld" style="margin:0"><label for="fs">Nível</label><select id="fs"><option value="">Todos</option>${['júnior','pleno','sênior'].map(x=>`<option${F.sen===x?' selected':''}>${x}</option>`).join('')}</select></div><div class="fld" style="margin:0"><label for="fl">Local</label><input type="text" id="fl" value="${esc(F.loc)}" placeholder="Cidade ou estado"></div></div>
+  ${jobs.length?jobs.map(j=>{const have=j.sk.filter(k=>lv(k)>=2),miss=j.sk.filter(k=>lv(k)<2),p=Math.round(have.length/j.sk.length*100);return `<div class="c"><div class="row"><h3 class="sp">${esc(j.t)}</h3><span class="chip warn">Exemplo</span></div><p class="mut" style="margin:0">${esc(j.co)} · ${esc(j.loc)}</p><div class="chips" style="margin:8px 0"><span class="chip">${esc(j.mod)}</span><span class="chip">${esc(j.sen)}</span></div><div class="row"><span class="pct">${p}%</span><span class="hint">de compatibilidade com suas competências</span></div><div class="fit" aria-hidden="true"><i style="width:${p}%"></i></div>${have.length?`<p style="margin:8px 0 0"><b>Você já tem:</b> ${have.map(k=>esc(SK[k].n)).join(', ')}</p>`:''}${miss.length?`<p style="margin:4px 0 0"><b>Falta desenvolver:</b> ${miss.map(k=>esc(SK[k].n)).join(', ')}</p>`:'<p class="okm">Você cobre todas as competências listadas.</p>'}</div>`}).join(''):'<div class="empty">Nenhuma vaga-modelo com esses filtros.</div>'}`}
+ else{
+  const all=UI.flt.evAll,areas=c?[c.a]:(S.ans.interests||[]);
+  const ev=EVENTS.filter(e=>all||!areas.length||e.a.some(a=>areas.includes(a)));
+  body=`<p class="mut">Comunidades e hackathons costumam ter versões online. As datas mudam: abra a página oficial para ver o calendário atual.</p><label class="tg" style="display:inline-flex;gap:8px;align-items:center;border-radius:14px;margin-bottom:12px"><input type="checkbox" id="evall" ${all?'checked':''}> Mostrar todos</label>`+ev.map(e=>`<div class="c"><div class="row"><h3 class="sp">${esc(e.n)}</h3><span class="chip">${esc(e.t)}</span></div><p>${esc(e.d)}</p><p class="hint">${esc(e.when)}</p><div class="row">${A_(e.url,'Abrir página oficial')}${S.done['ev:'+e.id]?'<span class="chip ok">Explorado</span>':''}</div></div>`).join('')}
+ paint(`<h1>Oportunidades</h1>${tabs}<div style="margin-top:14px">${body}</div>${AINOTE}`);
+ $$('[data-t]').forEach(b=>b.onclick=()=>{UI.oppTab=b.dataset.t;render()});
+ if(t==='vagas'){$('#fm').onchange=e=>{UI.flt.mod=e.target.value;render()};$('#fs').onchange=e=>{UI.flt.sen=e.target.value;render()};$('#fl').onchange=e=>{UI.flt.loc=e.target.value;render()}}
+ else $('#evall').onchange=e=>{UI.flt.evAll=e.target.checked;render()}}
+
+/* ===== Calendário: planejamento, arrastar, atrasos, .ics ===== */
+const PH=44,KINDS={estudo:'Estudo',pomodoro:'Foco (Pomodoro)',simulado:'Simulado'};
+const bEnd=b=>b.start+b.dur;
+const bAt=d=>S.blocks.filter(b=>b.date===d);
+function inAvail(b){const d=pISO(b.date),i=dow(d);if(S.ans.off[i])return false;return S.ans.avail[i].some(r=>b.start>=r[0]&&bEnd(b)<=r[1])}
+function isLate(b){if(b.done)return false;const d=pISO(b.date);d.setHours(0,bEnd(b),0,0);return d<new Date()}
+function overlaps(b,ignore){return S.blocks.some(o=>o.id!==ignore&&o.date===b.date&&b.start<bEnd(o)&&o.start<bEnd(b))}
+function freeRanges(ds,minStart){
+ const i=dow(pISO(ds));if(S.ans.off[i])return[];
+ let fr=S.ans.avail[i].map(r=>[Math.max(r[0],minStart||0),r[1]]).filter(r=>r[1]-r[0]>=15);
+ bAt(ds).sort((a,b)=>a.start-b.start).forEach(b=>{const n=[];fr.forEach(r=>{if(bEnd(b)<=r[0]||b.start>=r[1])n.push(r);else{if(b.start>r[0])n.push([r[0],b.start]);if(bEnd(b)<r[1])n.push([bEnd(b),r[1]])}});fr=n.filter(r=>r[1]-r[0]>=15)});
+ return fr}
+function nowMin(){const n=new Date();return Math.ceil((n.getHours()*60+n.getMinutes())/15)*15}
+function minStartFor(ds){const t=iso(new Date());return ds<t?1e4:ds===t?nowMin():0}
+function remainingMin(a){const used=S.blocks.filter(b=>b.act===a.id).reduce((t,b)=>t+b.dur,0);return Math.max(0,Math.round((a.h||0)*60)-used)}
+function weekMin(ws){const a=iso(ws),z=iso(addD(ws,6));return S.blocks.filter(b=>b.date>=a&&b.date<=z).reduce((t,b)=>t+b.dur,0)}
+function planWeek(ws){
+ const cap=Math.round(S.ans.hours*60*S.load);let capRem=cap-weekMin(ws);
+ const acts=pendingActs().map(a=>({...a,rem:remainingMin(a)})).filter(a=>a.rem>=15);
+ if(!acts.length)return{added:0,why:S.goal?'Você não tem atividades pendentes sem horário.':'Escolha uma carreira como meta para que eu possa sugerir atividades.'};
+ if(availTotal()<30)return{added:0,why:'Informe sua disponibilidade primeiro.'};
+ if(capRem<25)return{added:0,why:'Sua meta de horas desta semana já está preenchida.'};
+ let added=0,idx=0;const ids=[];const days=[0,1,2,3,4,5,6].map(i=>iso(addD(ws,i)));
+ for(let pass=0;pass<3&&capRem>=25&&idx<acts.length;pass++){
+  for(const ds of days){
+   if(capRem<25||idx>=acts.length)break;
+   if(bAt(ds).length>=3)continue;
+   const fr=freeRanges(ds,minStartFor(ds)).find(r=>r[1]-r[0]>=25);if(!fr)continue;
+   const a=acts[idx];let len=Math.min(50,a.rem,fr[1]-fr[0],capRem);len=Math.floor(len/15)*15;if(len<15)continue;
+   const nid=uid();ids.push(nid);S.blocks.push({id:nid,date:ds,start:fr[0],dur:len,title:a.t,kind:'estudo',act:a.id,done:false});
+   a.rem-=len;capRem-=len;added++;if(a.rem<15)idx++}}
+ save();return{added,ids,why:added?'':'Não encontrei horários livres nesta semana. Ajuste sua disponibilidade.'}}
+function reschedule(){
+ const late=S.blocks.filter(isLate);if(!late.length)return 0;let n=0;
+ late.forEach(b=>{S.blocks=S.blocks.filter(x=>x.id!==b.id);
+  for(let k=0;k<21;k++){const ds=iso(addD(new Date(),k)),fr=freeRanges(ds,minStartFor(ds)).find(r=>r[1]-r[0]>=b.dur);if(fr){S.blocks.push({...b,id:uid(),date:ds,start:fr[0]});n++;return}}});
+ save();return n}
+
+/* ---------- Tela ---------- */
+function calDays(){return UI.calView==='dia'?[new Date(UI.calDate)]:[0,1,2,3,4,5,6].map(i=>addD(wStart(UI.calDate),i))}
+function pgCal(){
+ const days=calDays(),ws=wStart(UI.calDate),today=iso(new Date());
+ const mins=[420],maxs=[1260];
+ S.ans.avail.forEach(rs=>rs.forEach(r=>{mins.push(r[0]);maxs.push(r[1])}));S.blocks.forEach(b=>{mins.push(b.start);maxs.push(bEnd(b))});
+ const H0=Math.floor(Math.min(...mins)/60)*60,H1=Math.min(1440,Math.ceil(Math.max(...maxs)/60)*60),rows=(H1-H0)/60;
+ const px=m=>(m-H0)/60*PH;
+ const wk=weekMin(ws),cap=Math.round(S.ans.hours*60*S.load),done=S.blocks.filter(b=>b.done).length,late=S.blocks.filter(isLate).length,out=S.blocks.filter(b=>!b.done&&!inAvail(b)).length;
+ const title=UI.calView==='dia'?fmtDate(days[0]):`${fmtShort(days[0])} a ${fmtShort(days[6])}`;
+ const pend=pendingActs().map(a=>({...a,rem:remainingMin(a)})).filter(a=>a.rem>=15).slice(0,5);
+ paint(`<h1>Calendário de estudos</h1>
+ <div class="calbar"><button type="button" class="btn ghost sm" id="pv" aria-label="${UI.calView==='dia'?'Dia anterior':'Semana anterior'}">‹</button><button type="button" class="btn ghost sm" id="nx2" aria-label="${UI.calView==='dia'?'Próximo dia':'Próxima semana'}">›</button><button type="button" class="btn ghost sm" id="hj">Hoje</button><h2 aria-live="polite">${esc(title)}</h2>
+  <div class="seg" role="group" aria-label="Visão"><button type="button" aria-pressed="${UI.calView==='semana'}" data-v="semana">Semana</button><button type="button" aria-pressed="${UI.calView==='dia'}" data-v="dia">Dia</button></div></div>
+ <div class="tot"><span>Planejado: <b>${fmtH(wk)}</b> de ${fmtH(cap)}</span><span>Concluídos: <b>${done}</b></span>${late?`<span class="chip warn">⚠ ${late} atrasado${late>1?'s':''}</span>`:''}${out?`<span class="chip warn">⚠ ${out} fora da disponibilidade</span>`:''}</div>
+ <div class="row" style="margin-bottom:10px"><button type="button" class="btn sm" id="pl">✨ Sugerir minha semana</button><button type="button" class="btn ghost sm" id="nw">+ Novo bloco</button><button type="button" class="btn ghost sm" id="av2">Disponibilidade</button>${late?'<button type="button" class="btn ghost sm" id="rs">Reagendar atrasados</button>':''}<button type="button" class="btn ghost sm" id="ex">Exportar .ics</button><button type="button" class="btn ghost sm" id="im">Importar .ics</button></div>
+ <div class="row" style="margin-bottom:8px"><label for="ld" class="lbl">Ritmo:</label><select id="ld" style="width:auto"><option value="0.7"${S.load===.7?' selected':''}>Leve (70% da meta)</option><option value="1"${S.load===1?' selected':''}>Normal</option><option value="1.3"${S.load===1.3?' selected':''}>Intenso (130%)</option></select></div>
+ <div class="leg" aria-hidden="true"><span><i style="background:var(--avail)"></i>Disponível</span><span><i style="background:var(--free);border-style:dashed"></i>Livre</span><span><i style="background:var(--k1-bg);border-color:var(--k1-b)"></i>Estudo</span><span><i style="background:var(--k2-bg);border-color:var(--k2-b)"></i>Foco</span><span><i style="background:var(--k3-bg);border-color:var(--k3-b)"></i>Simulado</span><span><i style="border-style:dashed"></i>Atrasado ⚠</span></div>
+ <div class="calw" tabindex="0" role="region" aria-label="Grade do calendário, role para ver mais"><div class="cal${days.length===1?' d1':''}" style="--n:${days.length};--ph:${PH}px">
+  <div class="ch"></div>${days.map(d=>`<div class="ch${iso(d)===today?' today':''}">${DS[dow(d)]}<small>${fmtShort(d)}</small></div>`).join('')}
+  <div class="ax" style="height:${rows*PH}px">${Array.from({length:rows},(_,i)=>`<span style="top:${i*PH}px">${pad((H0/60)+i)}h</span>`).join('')}</div>
+  ${days.map(d=>{const ds=iso(d),i=dow(d),off=S.ans.off[i];
+   return `<div class="col${ds===today?' t':''}" data-date="${ds}" style="height:${rows*PH}px">${off?'<div class="offd">Dia livre</div>':S.ans.avail[i].map(r=>`<div class="band av2" style="top:${px(r[0])}px;height:${px(r[1])-px(r[0])}px"></div>`).join('')}${freeRanges(ds,minStartFor(ds)).filter(r=>r[1]-r[0]>=45).map(r=>`<div class="band fr" style="top:${px(r[0])+2}px;height:${px(r[1])-px(r[0])-4}px">livre</div>`).join('')}
+   ${bAt(ds).map(b=>{const lt=isLate(b),ou=!b.done&&!inAvail(b),h=Math.max(b.dur/60*PH,24);
+    return `<button type="button" class="blk k-${b.kind}${b.done?' done':''}${lt?' late':''}${ou?' out':''}" data-id="${b.id}" style="top:${px(b.start)}px;height:${h}px" aria-label="${esc(b.title)}, ${hm(b.start)} às ${hm(bEnd(b))}${b.done?', concluído':''}${lt?', atrasado':''}${ou?', fora da disponibilidade':''}. Enter para editar."><b>${b.done?'✓ ':lt||ou?'⚠ ':''}${esc(b.title)}</b>${h>34?`<span>${hm(b.start)}–${hm(bEnd(b))}</span>`:''}<span class="rz" aria-hidden="true"></span></button>`}).join('')}</div>`}).join('')}
+ </div></div>
+ <p class="hint">Dica: arraste um bloco para mudar o horário ou puxe a borda de baixo para mudar a duração. Toque ou aperte Enter para editar.</p>
+ <h2 class="sec">Atividades da trilha ainda sem horário</h2>
+ ${pend.length?`<div class="pendl">${pend.map(a=>`<div class="pitem"><span>${esc(a.t)} <span class="hint">· faltam ${fmtH(a.rem)}</span></span><button type="button" class="btn sm" data-sch="${esc(a.id)}">Agendar</button></div>`).join('')}</div>`:`<div class="empty">${S.goal?'Tudo o que está na sua trilha já tem horário.':'Escolha uma carreira como meta para ver as atividades aqui.'}</div>`}`,true);
+ $('#pv').onclick=()=>{UI.calDate=addD(UI.calDate,UI.calView==='dia'?-1:-7);render()};
+ $('#nx2').onclick=()=>{UI.calDate=addD(UI.calDate,UI.calView==='dia'?1:7);render()};
+ $('#hj').onclick=()=>{UI.calDate=new Date();render()};
+ $$('[data-v]').forEach(b=>b.onclick=()=>{UI.calView=b.dataset.v;render()});
+ $('#ld').onchange=e=>{S.load=+e.target.value;save();if(S.load>1)toast('Ritmo intenso: lembre de incluir pausas e dias livres.');render()};
+ $('#pl').onclick=()=>{const r=planWeek(ws);r.added?(toast(r.added+' bloco'+(r.added>1?'s':'')+' sugerido'+(r.added>1?'s':'')+' para a semana',{label:'Desfazer',fn:()=>{S.blocks=S.blocks.filter(b=>!r.ids.includes(b.id));save();render()}}),say(r.added+' blocos adicionados')):toast(r.why);render()};
+ $('#nw').onclick=()=>blockModal(null);
+ $('#av2').onclick=()=>modal({title:'Disponibilidade semanal',wide:true,body:'<div id="avm"></div>',actions:[{label:'Concluir',cls:'',fn:()=>{const bad=[0,1,2,3,4,5,6].find(d=>!S.ans.off[d]&&dayErr(d));if(bad!==undefined){toast('Corrija os horários de '+DAYS[bad]);return false}}}],onOpen:()=>availEditor($('#avm')),onClose:render});
+ const rs=$('#rs');if(rs)rs.onclick=()=>{const n=reschedule();toast(n?n+' bloco(s) reagendado(s)':'Não encontrei horários livres para reagendar');render()};
+ $('#ex').onclick=exportICS;$('#im').onclick=importICS;
+ $$('[data-sch]').forEach(b=>b.onclick=()=>blockModal(null,b.dataset.sch));
+ $$('.blk').forEach(b=>{b.onclick=e=>{if(dragged)return;blockModal(S.blocks.find(x=>x.id===b.dataset.id))};b.onpointerdown=e=>startDrag(e,b)})}
+let dragged=false;
+function startDrag(e,el){
+ if(e.button>0)return;const b=S.blocks.find(x=>x.id===el.dataset.id),rz=e.target.classList.contains('rz');
+ const x0=e.clientX,y0=e.clientY,cols=$$('.col'),home=el.parentElement,hr=home.getBoundingClientRect();let moved=false,ns=b.start,nd=b.dur,ndate=b.date;
+ const mv=ev=>{const dx=ev.clientX-x0,dy=ev.clientY-y0;if(!moved&&Math.hypot(dx,dy)<5)return;
+  if(!moved){moved=true;el.classList.add('drag');el.setPointerCapture&&el.setPointerCapture(ev.pointerId)}
+  const dm=Math.round(dy/PH*4)*15;
+  if(rz){nd=clamp(Math.round((b.dur+dm)/15)*15,15,240);el.style.height=Math.max(nd/60*PH,24)+'px';return}
+  ns=clamp(Math.round((b.start+dm)/15)*15,0,1440-b.dur);
+  const c=cols.find(c=>{const r=c.getBoundingClientRect();return ev.clientX>=r.left&&ev.clientX<r.right});
+  let tx=0;if(c){ndate=c.dataset.date;tx=c.getBoundingClientRect().left-hr.left}
+  el.style.transform=`translate(${tx}px,${(ns-b.start)/60*PH}px)`};
+ const up=ev=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+  el.classList.remove('drag');
+  if(!moved)return;dragged=true;setTimeout(()=>dragged=false,0);
+  const nb={...b,start:rz?b.start:ns,dur:rz?nd:b.dur,date:rz?b.date:ndate};
+  if(ev.type==='pointercancel'){render();return}
+  if(overlaps(nb,b.id)){toast('Já existe um bloco neste horário.');render();return}
+  Object.assign(b,nb);save();if(!inAvail(b))toast('Este horário está fora da sua disponibilidade.');render()};
+ window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up)}
+
+function blockModal(b,actId){
+ const isNew=!b;const a=actId?pendingActs().find(x=>x.id===actId):null;
+ const cur=b||{id:uid(),date:iso(UI.calView==='dia'?UI.calDate:(wStart(UI.calDate)<=new Date()&&addD(wStart(UI.calDate),6)>=new Date()?new Date():wStart(UI.calDate))),start:0,dur:a?Math.min(50,Math.max(15,Math.floor(remainingMin({...a})/15)*15)):50,title:a?a.t:'',kind:'estudo',act:a?a.id:null,done:false};
+ if(isNew){const fr=freeRanges(cur.date,minStartFor(cur.date))[0];cur.start=fr?fr[0]:19*60}
+ modal({title:isNew?'Novo bloco de estudo':'Editar bloco',body:`<div class="fld"><label for="bt">Título</label><input type="text" id="bt" maxlength="80" value="${esc(cur.title)}"></div>
+ <div class="row"><div class="fld"><label for="bd">Data</label><input type="date" id="bd" value="${cur.date}"></div><div class="fld"><label for="bs">Início</label><input type="time" id="bs" step="900" value="${hm(cur.start)}"></div><div class="fld"><label for="bu">Duração (min)</label><input type="number" id="bu" min="15" max="240" step="15" value="${cur.dur}"></div></div>
+ <div class="fld"><label for="bk2">Tipo</label><select id="bk2">${Object.entries(KINDS).map(([k,v])=>`<option value="${k}"${cur.kind===k?' selected':''}>${v}</option>`).join('')}</select></div>
+ ${isNew?'':`<label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="bdn" ${cur.done?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Concluí este bloco</label>`}
+ ${cur.act&&!cur.done&&!isNew?`<label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="bad" style="width:22px;height:22px;accent-color:#7a35e6"> Com isso, concluí a atividade inteira</label>`:''}<p class="err" id="be" role="alert"></p>`,
+ actions:[...(isNew?[]:[{label:'Excluir',cls:'danger',fn:async()=>{S.blocks=S.blocks.filter(x=>x.id!==cur.id);save();toast('Bloco excluído');render()}}]),{label:'Cancelar',cls:'ghost'},{label:'Salvar',cls:'',keep:true,fn:api=>{
+  const t=$('#bt').value.trim(),d=$('#bd').value,s=$('#bs').value,u=Math.round(+$('#bu').value);const er=m=>{$('#be').textContent=m;return false};
+  if(!t)return er('Dê um título ao bloco.');if(!d)return er('Escolha a data.');if(!s)return er('Escolha o horário de início.');if(!(u>=15&&u<=240))return er('A duração deve ficar entre 15 e 240 minutos.');
+  const nb={...cur,title:t,date:d,start:hmToMin(s),dur:u,kind:$('#bk2').value};if(nb.start+nb.dur>1440)return er('O bloco passa da meia-noite.');
+  if(overlaps(nb,cur.id))return er('Já existe um bloco neste horário.');
+  const dn=$('#bdn');if(dn)nb.done=dn.checked;
+  Object.assign(cur,nb);if(isNew)S.blocks.push(cur);
+  if(cur.done){if(award('blk:'+cur.id,PTS.block,'Bloco concluído'))stamp();if(S.blocks.filter(x=>x.done).length>=3)unlock('planner')}
+  const ba=$('#bad');if(ba&&ba.checked&&cur.act)markAct(cur.act,true);
+  save();if(!inAvail(cur))toast('Salvo, mas fora da sua disponibilidade.');else toast('Bloco salvo');api.close();render();return false}}],onOpen:()=>{}})}
+
+/* ---------- .ics (horário local flutuante, sem fuso) ---------- */
+const icsT=(ds,m)=>ds.replace(/-/g,'')+'T'+pad(Math.floor(m/60))+pad(m%60)+'00';
+const icsEsc=s=>String(s).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+const icsUn=s=>s.replace(/\\n/gi,'\n').replace(/\\([;,\\])/g,'$1');
+function fold(l){const a=Array.from(l);if(a.length<=60)return l;const o=[];for(let i=0;i<a.length;i+=60)o.push((i?' ':'')+a.slice(i,i+60).join(''));return o.join('\r\n')}
+function buildICS(blocks){
+ const z=new Date(),st=z.getUTCFullYear()+pad(z.getUTCMonth()+1)+pad(z.getUTCDate())+'T'+pad(z.getUTCHours())+pad(z.getUTCMinutes())+pad(z.getUTCSeconds())+'Z';
+ const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Git Girls//PT-BR//','CALSCALE:GREGORIAN'];
+ blocks.forEach(b=>{L.push('BEGIN:VEVENT','UID:'+b.id+'@aurora-cloud','DTSTAMP:'+st,'DTSTART:'+icsT(b.date,b.start),'DTEND:'+icsT(b.date,bEnd(b)),'SUMMARY:'+icsEsc(b.title),'DESCRIPTION:'+icsEsc('Git Girls · '+(KINDS[b.kind]||'Estudo')),'X-AURORA-KIND:'+b.kind,'X-AURORA-DONE:'+(b.done?1:0));if(b.act)L.push('X-AURORA-ACT:'+icsEsc(b.act));L.push('END:VEVENT')});
+ L.push('END:VCALENDAR');return L.map(fold).join('\r\n')+'\r\n'}
+function parseDT(v){const m=/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})?(Z?)$/.exec(v.trim());if(!m)return null;
+ let d=new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);if(m[7])d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]));return d}
+function parseICS(text){
+ const lines=text.replace(/\r?\n[ \t]/g,'').split(/\r?\n/),out=[];let ev=null;
+ lines.forEach(l=>{if(l==='BEGIN:VEVENT'){ev={}}else if(l==='END:VEVENT'){if(ev)out.push(ev);ev=null}else if(ev){const i=l.indexOf(':');if(i<0)return;const k=l.slice(0,i).split(';')[0].toUpperCase();ev[k]=l.slice(i+1)}});
+ const res=[];out.forEach(e=>{const a=e.DTSTART&&parseDT(e.DTSTART);if(!a)return;const z=e.DTEND&&parseDT(e.DTEND);let dur=z?Math.round((z-a)/60000):50;if(!(dur>=15))dur=50;dur=Math.min(240,Math.round(dur/15)*15);
+  const start=a.getHours()*60+a.getMinutes(),kind=KINDS[e['X-AURORA-KIND']]?e['X-AURORA-KIND']:'estudo';
+  let id=e.UID&&/@aurora-cloud$/.test(e.UID)?e.UID.replace(/@aurora-cloud$/,''):'';
+  res.push({id:id||uid(),date:iso(a),start,dur,title:icsUn(e.SUMMARY||'Evento importado').slice(0,80),kind,act:e['X-AURORA-ACT']?icsUn(e['X-AURORA-ACT']):null,done:e['X-AURORA-DONE']==='1',_ext:!id})});
+ return res}
+function mergeBlocks(list){let n=0,sk=0;list.forEach(b=>{const dup=S.blocks.some(x=>x.id===b.id||(b._ext&&x.date===b.date&&x.start===b.start&&x.title===b.title));if(dup||overlaps(b)){sk++;return}delete b._ext;S.blocks.push(b);n++});save();return{n,sk}}
+async function exportICS(){
+ if(!S.blocks.length)return toast('Não há blocos para exportar.');
+ const text=buildICS(S.blocks),r=await saveFile('git-girls-calendario.ics',text);
+ if(r==='saved')return toast('Calendário exportado');if(r==='declined')return toast('Download cancelado');
+ modal({title:'Exportar calendário',wide:true,body:`<p>Não foi possível baixar um arquivo .ics neste ambiente. Copie o texto abaixo, cole em um arquivo chamado <b>calendario.ics</b> e importe no seu app de agenda. Os horários são locais, sem fuso, e não mudam com o horário de verão.</p><textarea class="ta mono" id="icst" rows="9" readonly aria-label="Conteúdo do arquivo .ics">${esc(text)}</textarea>`,
+  actions:[{label:'Fechar',cls:'ghost'},{label:'Baixar como .txt',cls:'ghost',keep:true,fn:async()=>{const x=await saveFile('git-girls-calendario.txt',text);toast(x==='saved'?'Arquivo salvo':'Não foi possível baixar');return false}},{label:'Copiar texto',cls:'',keep:true,fn:async()=>{const t=$('#icst');t.select();try{await navigator.clipboard.writeText(text);toast('Texto copiado')}catch(e){toast('Selecione o texto e copie manualmente')}return false}}]})}
+function importICS(){
+ modal({title:'Importar calendário (.ics)',wide:true,body:`<div class="fld"><label for="icf">Arquivo .ics</label><input type="file" id="icf" accept=".ics,.txt,text/calendar"></div><div class="fld"><label for="ict">Ou cole o texto do arquivo</label><textarea class="ta mono" id="ict" rows="6"></textarea></div><p class="hint">Eventos que se sobrepõem a blocos existentes ou que já foram importados são ignorados.</p><p class="err" id="ie" role="alert"></p>`,
+  actions:[{label:'Cancelar',cls:'ghost'},{label:'Importar',cls:'',keep:true,fn:async api=>{
+   let t=$('#ict').value;const f=$('#icf').files[0];if(f&&!t.trim()){if(f.size>2e6){$('#ie').textContent='Arquivo grande demais.';return false}t=await f.text()}
+   if(!/BEGIN:VCALENDAR/.test(t)){$('#ie').textContent='Não reconheci um calendário neste conteúdo.';return false}
+   const r=mergeBlocks(parseICS(t));api.close();toast(r.n+' importado(s)'+(r.sk?', '+r.sk+' ignorado(s)':''));render();return false}}]})}
+
+/* ===== Foco e bem-estar, progresso, mentora, ajustes, início ===== */
+const POM={mode:'focus',total:25*60,left:25*60,end:0,run:false,t:null};
+const MODES={focus:['Foco','focus'],short:['Pausa curta','short'],long:['Pausa longa','long']};
+const modeSecs=m=>(S.pom[m]||25)*60;
+function pomSet(m){POM.mode=m;POM.total=POM.left=modeSecs(m);POM.run=false;POM.end=0;clearInterval(POM.t)}
+function beep(){if(!S.pom.sound)return;try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),gn=c.createGain();o.frequency.value=660;o.connect(gn);gn.connect(c.destination);gn.gain.setValueAtTime(.12,c.currentTime);gn.gain.exponentialRampToValueAtTime(.001,c.currentTime+.8);o.start();o.stop(c.currentTime+.8)}catch(e){}}
+function pomTick(){POM.left=Math.max(0,Math.ceil((POM.end-Date.now())/1000));pomPaint();if(POM.left<=0)pomDone()}
+function pomDone(){clearInterval(POM.t);POM.run=false;beep();
+ if(POM.mode==='focus'){S.pom.cycles++;if(award('pomo:'+Date.now(),PTS.pomo,'Ciclo de foco concluído'))unlock('first-pomo');save();const long=S.pom.cycles%S.pom.every===0;toast(long?'Ciclo concluído! Hora de uma pausa longa.':'Ciclo concluído! Faça uma pausa curta.');say('Ciclo de foco concluído');pomSet(long?'long':'short')}
+ else{toast('Pausa terminada. Pronta para o próximo foco?');say('Pausa terminada');pomSet('focus')}
+ if(effPage()==='foco')pgFocus()}
+function pomPaint(){const t=$('#tmt');if(!t)return;const m=Math.floor(POM.left/60),sc=POM.left%60;t.textContent=pad(m)+':'+pad(sc);const rg=$('#rg');if(rg)rg.style.strokeDashoffset=String(628.3*(1-POM.left/POM.total));document.title=(POM.run?pad(m)+':'+pad(sc)+' · ':'')+PAGES.foco[0]+' · Git Girls'}
+const MOODS=[['otima','😄','Ótima'],['bem','🙂','Bem'],['normal','😐','Normal'],['cansada','😴','Cansada'],['sobrecarregada','😣','Sobrecarregada']];
+let breathT=null;
+function pgFocus(){
+ const P=S.pom,last=S.moods.slice(0,3),neg=m=>m==='cansada'||m==='sobrecarregada';
+ const persist=last.length===3&&last.every(x=>neg(x.m));
+ paint(`<h1>Foco e bem-estar</h1>
+ <div class="c center"><div class="row" style="justify-content:center" role="group" aria-label="Modo do cronômetro">${Object.entries(MODES).map(([k,v])=>`<button type="button" class="tg" aria-pressed="${POM.mode===k}" data-m="${k}">${v[0]}</button>`).join('')}</div>
+  <div class="tmr"><div class="ringw"><svg viewBox="0 0 220 220" aria-hidden="true"><circle cx="110" cy="110" r="100" fill="none" stroke="var(--line)" stroke-width="12"/><circle id="rg" cx="110" cy="110" r="100" fill="none" stroke="#c42a86" stroke-width="12" stroke-linecap="round" stroke-dasharray="628.3" stroke-dashoffset="0" style="stroke:var(--acc)"/></svg><div class="tm" role="timer" aria-label="Tempo restante"><span id="tmt">00:00</span><small>${MODES[POM.mode][0]}</small></div></div></div>
+  <div class="row" style="justify-content:center"><button type="button" class="btn" id="st">${POM.run?'Pausar':'Iniciar'}</button><button type="button" class="btn ghost" id="rst">Reiniciar</button><button type="button" class="btn ghost" id="skp">Pular</button></div>
+  <p class="hint" style="margin-top:12px">Ciclos de foco concluídos: <b>${P.cycles}</b>. A cada ${P.every} ciclos, uma pausa longa.</p></div>
+ <details class="d"><summary>Configurar tempos e alertas</summary><div class="row" style="margin-top:10px">${[['focus','Foco (min)'],['short','Pausa curta'],['long','Pausa longa'],['every','Ciclos até a pausa longa']].map(([k,l])=>`<div class="fld" style="margin:0"><label for="pc-${k}">${l}</label><input type="number" id="pc-${k}" min="1" max="${k==='every'?8:90}" value="${P[k]}" style="width:100px"></div>`).join('')}</div>
+  <label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="snd" ${P.sound?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Som ao terminar</label><label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="vis" ${P.visual?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Aviso visual ao terminar</label></details>
+ <h2 class="sec">Como você está hoje?</h2>
+ <div class="c"><div class="mood" role="group" aria-label="Como você está hoje">${MOODS.map(m=>`<button type="button" class="tg" data-mood="${m[0]}"><span aria-hidden="true">${m[1]}</span>${m[2]}</button>`).join('')}</div><div id="mr" aria-live="polite"></div>
+  ${persist?`<div class="infobox" style="margin-top:12px"><b>Você tem se sentido assim há alguns registros seguidos.</b> Pode ajudar conversar com alguém de confiança ou com uma profissional de saúde. No Brasil, o CVV atende de graça, 24 horas, pelo telefone 188.</div>`:''}
+  ${S.moods.length?`<p class="hint" style="margin-top:10px">Últimos registros: ${S.moods.slice(0,5).map(x=>(MOODS.find(m=>m[0]===x.m)||[0,''])[1]+' '+fmtShort(new Date(x.t))).join(' · ')}</p>`:''}</div>
+ <h2 class="sec">Respiração guiada</h2>
+ <div class="c center"><div class="brt" id="br" aria-hidden="true"><span id="brt">Pronta?</span></div><div class="sr" id="brl" aria-live="polite"></div><button type="button" class="btn" id="bs">Começar (1 minuto)</button></div>
+ <div class="c"><h3>Cuidados com você</h3><ul style="margin:0;padding-left:20px"><li>Estudar em blocos curtos com pausas costuma render mais do que maratonas.</li><li>Dias livres fazem parte do plano. Descansar não atrasa a trilha.</li><li>Se a semana apertar, use o ritmo "Leve" no calendário.</li></ul><p class="hint" style="margin-top:8px">Este espaço não substitui acompanhamento de saúde.</p></div>`);
+ pomPaint();
+ $$('[data-m]').forEach(b=>b.onclick=()=>{pomSet(b.dataset.m);pgFocus()});
+ $('#st').onclick=()=>{if(POM.run){clearInterval(POM.t);POM.run=false}else{POM.run=true;POM.end=Date.now()+POM.left*1000;POM.t=setInterval(pomTick,500)}pgFocus()};
+ $('#rst').onclick=()=>{pomSet(POM.mode);pgFocus()};
+ $('#skp').onclick=()=>{if(POM.mode==='focus')pomSet('short');else pomSet('focus');pgFocus()};
+ ['focus','short','long','every'].forEach(k=>$('#pc-'+k).onchange=e=>{P[k]=clamp(Math.round(+e.target.value)||P[k],1,k==='every'?8:90);save();if(!POM.run&&k!=='every'&&k===POM.mode){pomSet(POM.mode);pgFocus()}});
+ $('#snd').onchange=e=>{P.sound=e.target.checked;save()};$('#vis').onchange=e=>{P.visual=e.target.checked;save()};
+ $$('[data-mood]').forEach(b=>b.onclick=()=>{const m=b.dataset.mood;S.moods.unshift({t:Date.now(),m});S.moods=S.moods.slice(0,30);save();
+  const r=$('#mr');const bad=neg(m);
+  r.innerHTML=bad?`<div class="infobox" style="margin-top:12px"><b>Obrigada por contar.</b> Que tal uma pausa de 5 minutos ou a respiração guiada abaixo? Se quiser, deixe a semana mais leve.<br><button type="button" class="btn sm" id="lt">Deixar a semana mais leve</button></div>`:`<p class="okm" style="margin-top:12px">Registrado. Bom estudo!</p>`;
+  if(bad){$('#lt').onclick=()=>{S.load=.7;save();toast('Ritmo leve ativado no calendário')}}say('Humor registrado')});
+ $('#bs').onclick=()=>{if(breathT){clearInterval(breathT);breathT=null;$('#bs').textContent='Começar (1 minuto)';$('#brt').textContent='Pronta?';$('#br').classList.remove('in');return}
+  let n=0;const step=()=>{const inh=n%2===0;$('#br').classList.toggle('in',inh);$('#brt').textContent=inh?'Inspire':'Expire';$('#brl').textContent=inh?'Inspire':'Expire';n++;if(n>14){clearInterval(breathT);breathT=null;if($('#bs')){$('#bs').textContent='Começar (1 minuto)';$('#brt').textContent='Pronta?';$('#br').classList.remove('in')}}};
+  $('#bs').textContent='Parar';step();breathT=setInterval(()=>{if(!$('#br')){clearInterval(breathT);breathT=null;return}step()},4000)}}
+
+/* ---------- Progresso ---------- */
+function pgProg(){
+ const L=lvl(),w=weekStats(),ach=ACH.map(a=>({...a,on:!!S.ach[a.id]})),nick=S.rank.nick||'Você';
+ paint(`<h1>Meu progresso</h1>
+ <div class="c"><div class="row"><div class="sp"><div class="mut">Nível ${L.n}</div><div class="big">${L.name}</div></div><div class="big" aria-label="${S.xp} pontos">⭐ ${S.xp}</div></div><div class="lvb" role="progressbar" aria-valuenow="${L.pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso até o próximo nível"><i style="width:${L.pct}%"></i></div><p class="hint" style="margin-top:6px">Faltam ${100-L.pct} pontos para o próximo nível.</p></div>
+ <div class="stats"><div class="c"><div class="big">🔥 ${curStreak()}</div><div class="mut">dias seguidos</div></div><div class="c"><div class="big">${w.pts}</div><div class="mut">pontos na semana</div></div><div class="c"><div class="big">${w.acts}</div><div class="mut">atividades na semana</div></div><div class="c"><div class="big">${S.pom.cycles}</div><div class="mut">ciclos de foco</div></div></div>
+ <h2 class="sec">Conquistas</h2><div class="achg">${ach.map(a=>`<div class="ach${a.on?'':' lk'}"><span class="em" aria-hidden="true">${a.e}</span><div><b>${esc(a.n)}</b><br><span class="hint">${esc(a.d)}</span><br><span class="${a.on?'okm':'hint'}">${a.on?'Conquistada':'Bloqueada'}</span></div></div>`).join('')}</div>
+ <h2 class="sec">Ranking opcional</h2>
+ <div class="c"><label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="rk" ${S.rank.on?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Quero aparecer no ranking semanal com um apelido</label>
+ ${S.rank.on?`<div class="fld"><label for="nk">Apelido (não use seu nome completo)</label><input type="text" id="nk" maxlength="20" value="${esc(S.rank.nick)}"></div><div class="tw"><table class="tb"><caption class="sr">Ranking semanal</caption><thead><tr><th>#</th><th>Apelido</th><th>Pontos na semana</th></tr></thead><tbody><tr><td>1</td><td>${esc(nick)}</td><td>${w.pts}</td></tr></tbody></table></div><p class="hint">Neste protótipo só você aparece. Um ranking com outras participantes precisa de contas e de um servidor, e só mostraria o apelido de quem aceitou participar.</p>`:'<p class="hint">Participar é opcional e você pode sair quando quiser.</p>'}</div>
+ <h2 class="sec">Histórico</h2><div class="c">${S.hist.length?`<ul style="margin:0;padding-left:20px">${S.hist.slice(0,12).map(h=>`<li>${esc(h.l)}${h.p?` <b>+${h.p}</b>`:''} <span class="hint">${esc(new Date(h.t).toLocaleDateString('pt-BR'))}</span></li>`).join('')}</ul>`:'<p class="mut" style="margin:0">Complete atividades, testes e blocos de estudo para ver seu histórico aqui.</p>'}</div>`);
+ $('#rk').onchange=e=>{S.rank.on=e.target.checked;S.consent.rank=e.target.checked;save();render()};
+ const nk=$('#nk');if(nk)nk.onchange=e=>{S.rank.nick=e.target.value.trim().slice(0,20);save();render()}}
+
+/* ---------- Mentora com IA ---------- */
+let ALLOWED=null;
+function allowed(){if(ALLOWED)return ALLOWED;ALLOWED=new Set(CAT_URLS);CERTS.forEach(c=>{ALLOWED.add(c.url);ALLOWED.add(c.lrn[1])});EVENTS.forEach(e=>ALLOWED.add(e.url));return ALLOWED}
+function fmtMsg(t){return String(t).split(/(https?:\/\/[^\s<>)]+)/g).map((p,i)=>{if(i%2){const u=p.replace(/[.,;:!?]+$/,''),tail=p.slice(u.length);return allowed().has(u)?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a>${esc(tail)}`:esc(u)+' (link não verificado)'+esc(tail)}return esc(p).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}).join('')}
+const DISTRESS=/(me matar|suic[ií]d|me machucar|quero morrer|n[aã]o aguento mais viver|acabar com tudo)/i;
+function localAnswer(q){
+ const n=nz(q),c=goalC();
+ if(/certific/.test(n)){const l=(c?c.certs.map(id=>CERTS.find(x=>x.id===id)):CERTS.slice(0,3));return `Para ${c?'a sua meta ('+c.n+')':'começar'}, estas certificações costumam aparecer: ${l.map(x=>x.n).join('; ')}. Veja pré-requisitos, domínios e simulados no menu Certificações. Confirme valores e regras no site oficial.`}
+ if(/carreira|area|qual.*seguir|o que.*estudar/.test(n)){const l=(S.profile?S.profile.careers.slice(0,3).map(x=>CAREERS.find(y=>y.id===x.id)):CAREERS.slice(0,3));return `Pelas suas respostas, vale olhar com calma: ${l.map(x=>x.n).join('; ')}. Abra o menu Carreiras para ver o dia a dia de cada uma e escolher sua meta.`}
+ if(/hoje|proxim|continuar|comecar|por onde/.test(n)){const a=pendingActs()[0];return a?`Seu próximo passo na trilha: ${a.t} (cerca de ${a.h}h). Se preferir, agende no calendário e estude em blocos de 50 minutos.`:'Escolha uma carreira como meta no menu Carreiras e eu mostro seu próximo passo.'}
+ if(/cansad|desanim|sobrecarreg|ansios|nao consigo|estress/.test(n))return 'Sinto que a semana pode estar pesada. Experimente uma pausa curta, a respiração guiada em Foco e bem-estar, ou deixe o calendário em ritmo leve. Descansar faz parte do plano. Se esse cansaço se repete há dias, conversar com alguém de confiança pode ajudar.';
+ const hit=[...Object.values(SK)].find(s=>n.includes(nz(s.n).split(' ')[0])&&nz(s.n).split(' ')[0].length>3);
+ if(hit)return `${hit.n} está no catálogo da plataforma. Você encontra materiais e um mini-teste na sua trilha. Um bom começo: ${hit.res[0].t} (${hit.res[0].url}).`;
+ return 'A IA não está disponível agora, então respondo só com o que está no catálogo. Pergunte sobre certificações, carreiras ou o seu próximo passo na trilha.'}
+const SUGS=['Qual certificação faz sentido para mim?','O que estudar hoje?','Estou desanimada. E agora?','Como montar um portfólio?'];
+function mentorCtx(){const c=goalC();return `Perfil: nível ${S.profile?LEVN[S.profile.level]:'não definido'}. Meta: ${c?c.n:'ainda não escolhida'}. Competências fortes: ${S.profile?S.profile.strengths.map(k=>SK[k].n).join(', ')||'nenhuma ainda':'-'}. Próximas atividades: ${pendingActs().slice(0,3).map(a=>a.t).join('; ')||'-'}. Pontos: ${S.xp}.`}
+async function mentorSend(text){
+ text=text.trim().slice(0,600);if(!text)return;
+ S.chat.push({r:'u',t:text});drawMsgs();
+ let reply='',ai=false;
+ if(DISTRESS.test(text)){reply='Sinto muito que você esteja passando por isso. Você não precisa enfrentar sozinha. No Brasil, o CVV atende de graça, 24 horas, pelo telefone 188, e o SAMU pelo 192 em emergências. Se puder, fale agora com alguém de confiança. Estou aqui para ajudar com seus estudos quando você se sentir pronta.'}
+ else if(SAMPLE&&aiSlot()){
+  const hist=S.chat.slice(-7,-1).map(m=>(m.r==='u'?'Aluna: ':'Mentora: ')+m.t).join('\n');
+  const prompt=`Você é a Mentora da plataforma Git Girls, que apoia mulheres em carreiras de nuvem (cloud). Regras: responda em português do Brasil, em tom acolhedor e direto, com no máximo 120 palavras. Nunca prometa emprego, salário ou aprovação em prova. Não invente links, nomes de cursos, vagas ou datas: se não souber, diga e sugira conferir nos sites oficiais. Só cite carreiras e certificações comuns do mercado. Se a aluna demonstrar sofrimento emocional, acolha e sugira apoio humano. Não peça dados pessoais.
+${mentorCtx()}
+Conversa até aqui:
+${hist}
+Aluna: ${text}
+Mentora:`;
+  const idx=S.chat.length;S.chat.push({r:'a',t:'',ai:true});drawMsgs();
+  try{const r=await SAMPLE(prompt,{cache:false,modelTier:'quick',onText:({text:t})=>{S.chat[idx].t=t;const el=$('#msgs .msg:last-child');if(el)el.innerHTML=fmtMsg(t)+'<br>';scrollMsgs()}});
+   S.chat[idx].t=(r.text||'').trim()||localAnswer(text);S.chat[idx].ai=!!(r.text||'').trim();save();drawMsgs();return}
+  catch(e){const code=e&&e.code;const part=e&&e.text;S.chat[idx].t=(part&&part.length>20?part+'\n\n':'')+(code==='cancelled'?'':aiErr(code))+(part&&part.length>20?'':'\n\n'+localAnswer(text));S.chat[idx].ai=false;save();drawMsgs();return}}
+ else reply=localAnswer(text);
+ S.chat.push({r:'a',t:reply,ai});S.chat=S.chat.slice(-30);save();drawMsgs()}
+function scrollMsgs(){const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight}
+function drawMsgs(){const m=$('#msgs');if(!m)return;
+ m.innerHTML=(S.chat.length?'':`<div class="msg">Oi! Eu sou a Mentora. Posso ajudar com carreiras, certificações e com o seu próximo passo. O que você quer saber?</div>`)+S.chat.map((x,i)=>`<div class="msg${x.r==='u'?' me':''}">${fmtMsg(x.t||'…')}${x.r==='a'&&x.t?`<br><span class="hint">${x.ai?'✨ Gerado por IA. Confirme nos sites oficiais. ':''}${rateBtns('m:'+i)}</span>`:''}</div>`).join('');scrollMsgs()}
+function mentorOpen(){
+ const el=$('#mentor');if(!el.hidden)return mentorClose();
+ el.hidden=false;$('#fab').setAttribute('aria-expanded','true');
+ el.innerHTML=`<header><h2 id="mh">Mentora com IA</h2><button type="button" class="ib" id="mclr" aria-label="Limpar conversa" title="Limpar conversa">🗑️</button><button type="button" class="ib" id="mx" aria-label="Fechar a mentora">✕</button></header><div id="msgs" tabindex="0" aria-live="polite" aria-label="Conversa"></div><div class="sugs">${SUGS.map(s=>`<button type="button" class="tg" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div><form id="mform"><input type="text" id="mi" maxlength="600" placeholder="Pergunte algo" aria-label="Sua pergunta para a mentora" autocomplete="off"><button class="btn" type="submit">Enviar</button></form>`;
+ el.setAttribute('aria-labelledby','mh');drawMsgs();$('#mi').focus();
+ $('#mx').onclick=mentorClose;
+ $('#mclr').onclick=async()=>{if(await ask('Limpar a conversa?','As mensagens com a mentora serão apagadas deste aparelho.','Limpar')){S.chat=[];save();drawMsgs()}};
+ $('#mform').onsubmit=e=>{e.preventDefault();const i=$('#mi'),v=i.value;i.value='';mentorSend(v)};
+ $$('[data-s]',el).forEach(b=>b.onclick=()=>mentorSend(b.dataset.s))}
+function mentorClose(){const el=$('#mentor');el.hidden=true;el.innerHTML='';$('#fab').setAttribute('aria-expanded','false');$('#fab').focus()}
+$('#fab').onclick=mentorOpen;$('#fab').setAttribute('aria-expanded','false');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#mentor').hidden&&!$('#modal-root').children.length)mentorClose()});
+
+/* ---------- Ajustes, privacidade e IA responsável ---------- */
+async function exportData(){
+ const data=JSON.stringify({exportadoEm:new Date().toISOString(),app:'Git Girls',dados:S},null,2),r=await saveFile('git-girls-meus-dados.json',data);
+ if(r==='saved')toast('Dados exportados');else if(r==='declined')toast('Download cancelado');else showText('Meus dados','Não foi possível baixar o arquivo. Copie o texto abaixo e guarde onde preferir.',data)}
+function pgSet(){
+ const th=S.theme||'auto';
+ paint(`<h1>Ajustes</h1>
+ <div class="c"><h2>Aparência</h2><div class="seg" role="group" aria-label="Tema"><button type="button" data-th="light" aria-pressed="${th==='light'}">Claro</button><button type="button" data-th="dark" aria-pressed="${th==='dark'}">Escuro</button><button type="button" data-th="auto" aria-pressed="${th==='auto'}">Automático</button></div></div>
+ <div class="c"><h2>Meu perfil e meta</h2><p>${goalC()?'Meta atual: <b>'+esc(goalC().n)+'</b>.':'Você ainda não escolheu uma meta.'}</p><div class="row"><button type="button" class="btn ghost sm" id="p1">Ver perfil</button><button type="button" class="btn ghost sm" id="p2">Disponibilidade</button></div></div>
+ <div class="c"><h2>Privacidade e dados (LGPD)</h2><p>Seus dados ficam <b>somente neste navegador</b>: respostas do questionário, trilha, calendário, pontos e conversas. Não enviamos seu currículo: ele é lido no seu aparelho e só guardamos as competências encontradas.</p>
+  <label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="c1" ${S.consent.cv?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Permito ler meu currículo para sugerir competências</label>
+  <label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="c2" ${S.rank.on?'checked':''} style="width:22px;height:22px;accent-color:#7a35e6"> Participar do ranking com apelido</label>
+  <div class="row" style="margin-top:8px"><button type="button" class="btn ghost sm" id="ex">Exportar meus dados</button><button type="button" class="btn danger sm" id="dl">Apagar todos os meus dados</button></div></div>
+ <div class="c"><h2>Conta e login</h2><p>Neste protótipo não há conta nem senha: tudo fica no seu aparelho. Cadastro, recuperação de senha e sincronização entre aparelhos exigem um servidor e não estão disponíveis aqui.</p></div>
+ <div class="c"><h2>IA responsável</h2><ul style="margin:0;padding-left:20px"><li>A IA só ordena e explica itens de um catálogo curado de carreiras, certificações e materiais.</li><li>Sugestões não são garantias de emprego, salário ou aprovação.</li><li>Conteúdo gerado por IA vem sempre identificado com ✨.</li><li>Você pode avaliar cada recomendação com 👍 ou 👎 e ajustar seu perfil quando quiser.</li><li>Há um limite de 20 consultas à IA por hora neste aparelho.</li><li>Links externos só são abertos se estiverem no catálogo verificado.</li></ul></div>
+ <div class="c"><h2>Acessibilidade</h2><p style="margin:0">Navegação por teclado, foco visível, contraste AA, alvos de toque de 44 px, textos com rótulos para leitores de tela, tema claro e escuro e respeito à preferência por menos movimento.</p></div>`);
+ $$('[data-th]').forEach(b=>b.onclick=()=>{const v=b.dataset.th;if(v==='auto'){document.documentElement.removeAttribute('data-theme');S.theme=null}else{document.documentElement.setAttribute('data-theme',v);S.theme=v}save();syncTheme();render()});
+ $('#p1').onclick=()=>go('perfil');
+ $('#p2').onclick=()=>modal({title:'Disponibilidade semanal',wide:true,body:'<div id="avm"></div>',actions:[{label:'Concluir',cls:''}],onOpen:()=>availEditor($('#avm'))});
+ $('#c1').onchange=e=>{S.consent.cv=e.target.checked;save()};
+ $('#c2').onchange=e=>{S.rank.on=e.target.checked;S.consent.rank=e.target.checked;save()};
+ $('#ex').onclick=exportData;
+ $('#dl').onclick=async()=>{if(await ask('Apagar todos os dados?','Isso remove perfil, trilha, calendário, pontos e conversas deste navegador. Não dá para desfazer. Se quiser, exporte seus dados antes.','Apagar tudo')){
+  clearInterval(POM.t);try{localStorage.removeItem(KEY)}catch(e){}S=DEF();UI.careerOpen=null;UI.certOpen=null;pomSet('focus');document.documentElement.removeAttribute('data-theme');syncTheme();$('#mentor').hidden=true;location.hash='';updTop();render();toast('Dados apagados')}}}
+
+/* ---------- Início ---------- */
+function pgHome(){
+ const c=goalC(),a=pendingActs()[0],today=iso(new Date()),tb=bAt(today).sort((x,y)=>x.start-y.start),w=weekStats(),cap=Math.round(S.ans.hours*60*S.load),wk=weekMin(wStart(new Date()));
+ paint(`<div class="hero"><h1>Sua carreira em <em>cloud</em>, no seu ritmo</h1><p>${c?`Sua meta: ${esc(c.n)}. Cada pequeno passo conta.`:'Escolha uma carreira como meta e receba uma trilha de estudos que cabe na sua rotina.'}</p><button type="button" class="btn gold" id="hb">${c?'Continuar minha trilha':'Escolher minha meta'}</button><div class="bk" aria-hidden="true">☁️</div></div>
+ ${a?`<div class="next"><p class="nl">Seu próximo passo</p><h3>${esc(a.t)}</h3><p class="ns">Etapa ${a.stage+1}: ${ST[a.stage]} · cerca de ${a.h}h</p><div class="row"><button type="button" class="btn sm" id="nb">Ver na trilha</button><button type="button" class="btn ghost sm" id="ns">Agendar no calendário</button></div></div>`:c?`<div class="next"><p class="nl">Tudo em dia</p><h3>Você concluiu as atividades da trilha</h3><p class="ns">Explore oportunidades ou escolha uma nova meta.</p></div>`:''}
+ <div class="pil"><div class="c"><p class="lb">Hoje</p>${tb.length?`<ul style="margin:0;padding-left:18px">${tb.map(b=>`<li>${hm(b.start)} · ${esc(b.title)}${b.done?' ✓':''}</li>`).join('')}</ul>`:'<p class="mut" style="margin:0">Nenhum bloco hoje.</p>'}</div>
+  <div class="c"><p class="lb">Esta semana</p><p style="margin:0"><b>${fmtH(wk)}</b> planejadas de ${fmtH(cap)}</p><p class="hint" style="margin:4px 0 0">${w.acts} atividades · ${w.pts} pontos</p></div>
+  <div class="c"><p class="lb">Sequência</p><p style="margin:0"><b>🔥 ${curStreak()}</b> dias · ⭐ ${S.xp} pontos</p><p class="hint" style="margin:4px 0 0">Nível: ${lvl().name}</p></div></div>
+ <h2 class="sec">Explorar</h2><div class="uni">
+  <button type="button" class="uc" data-go="trilha"><span class="im" aria-hidden="true">🗺️</span><h3>Trilha</h3><p>Etapas, materiais e mini-testes.</p><span class="go">Abrir →</span></button>
+  <button type="button" class="uc" data-go="calendario"><span class="im" aria-hidden="true">📅</span><h3>Calendário</h3><p>Estudos dentro do seu tempo livre.</p><span class="go">Abrir →</span></button>
+  <button type="button" class="uc" data-go="certificacoes"><span class="im" aria-hidden="true">🏅</span><h3>Certificações</h3><p>Requisitos, temas e simulados.</p><span class="go">Abrir →</span></button>
+  <button type="button" class="uc" data-go="oportunidades"><span class="im" aria-hidden="true">💼</span><h3>Oportunidades</h3><p>Comunidades, eventos e vagas-modelo.</p><span class="go">Abrir →</span></button></div>${AINOTE}`,true);
+ $('#hb').onclick=()=>go(c?'trilha':'carreiras');
+ const nb=$('#nb');if(nb){nb.onclick=()=>{UI.stageOpen=a.stage;go('trilha')};$('#ns').onclick=()=>{go('calendario');setTimeout(()=>{const b=$('[data-sch="'+CSS.escape(a.id)+'"]');if(b)b.focus()},50)}}
+ $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go))}
+
+/* ---------- Início do app ---------- */
+syncTheme();updTop();render();
+
+</script>
+
+</body></html>
